@@ -1,6 +1,6 @@
-@tailwind base;
-@tailwind components;
+@tailwind/preflight;
 @tailwind utilities;
+@tailwind/postcss;
 
 /* Keep some of the existing custom styles */
 :root {

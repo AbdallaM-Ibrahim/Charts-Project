@@ -1,4 +1,4 @@
-import React from 'react';
+import type React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../hooks/store.hooks';
 import { selectToken } from '../store/features/user.slice';
@@ -17,14 +17,16 @@ const Navbar: React.FC = () => {
 
   return (
     <ElevationScroll>
-      <>
-        {/* Background container with fixed positioning */}
-        <header className='sticky top-0 w-full'>
-          <div className='fixed top-0 left-0 w-full h-[10rem] '>
-            <HeaderBackground className='h-full z-0' />
+      <header className='sticky top-0 w-full'>
+        {/* Fixed height container with grid layout for proper scaling */}
+        <div className='w-full relative min-h-[80px] grid grid-rows-1 grid-cols-1'>
+          {/* Background with proper sizing - fills the entire area */}
+          <div className='row-span-full col-span-full relative overflow-hidden w-full h-full'>
+            <HeaderBackground />
           </div>
-          {/* Content container with relative positioning to appear above the background */}
-          <div className='relative z-10 container mx-auto px-4 py-4'>
+
+          {/* Content layer - same grid area with higher z-index */}
+          <div className='z-10 container mx-auto px-4 py-4 row-span-full col-span-full relative'>
             <div className='flex items-center justify-between flex-wrap'>
               <RouterLink
                 to='/'
@@ -34,24 +36,25 @@ const Navbar: React.FC = () => {
               </RouterLink>
 
               <nav className='flex items-center space-x-4'>
-                {!token ? (
-                  <>
-                    <NavButton to='/register'>Register</NavButton>
-                    <NavButton to='/signin'>Sign In</NavButton>
-                  </>
-                ) : (
+                {token ? (
                   <button
+                    type='button'
                     onClick={onSignOutHandler}
                     className='px-4 py-2 border border-white rounded-md bg-transparent text-white hover:bg-white hover:text-purple-700 transition-colors'
                   >
                     Log Out
                   </button>
+                ) : (
+                  <>
+                    <NavButton to='/register'>Register</NavButton>
+                    <NavButton to='/signin'>Sign In</NavButton>
+                  </>
                 )}
               </nav>
             </div>
           </div>
-        </header>
-      </>
+        </div>
+      </header>
     </ElevationScroll>
   );
 };

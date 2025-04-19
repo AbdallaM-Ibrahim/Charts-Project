@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import type React from 'react';
+import { useEffect } from 'react';
 import './App.css';
 import { MyRouter } from './MyRouter';
 import { useAppDispatch, useAppSelector } from './hooks/store.hooks';
@@ -31,9 +32,7 @@ const App: React.FC = () => {
           </span>{' '}
           by{' '}
           <a
-            href=''
-            target='_blank'
-            rel='noopener noreferrer'
+            href='mailto:futuresolve.tech@gmail.com?subject=Contact from Charts Project'
             className='text-purple-600 hover:underline'
           >
             FutureSolve

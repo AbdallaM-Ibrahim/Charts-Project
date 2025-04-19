@@ -1,4 +1,4 @@
-import React from 'react';
+import type React from 'react';
 import { NavLink } from 'react-router-dom';
 
 interface NavButtonProps {
@@ -20,6 +20,7 @@ const NavButton: React.FC<NavButtonProps> = ({
 
       return (
         <button
+          type='button'
           className={`
             ${
               isActive
