@@ -1,5 +1,5 @@
-import axios from "axios";
-const baseUrl = "http://localhost:3000/api";
+import axios from 'axios';
+const baseUrl = 'http://localhost:3000/api';
 
 export type UserCredentials = {
   id?: number;
@@ -10,8 +10,7 @@ export type UserCredentials = {
 export type User = UserCredentials & {
   id: number;
   password?: string;
-  firstName: string;
-  lastName: string;
+  name: string;
   createdAt?: Date;
   updatedAt?: Date;
 };
@@ -25,7 +24,10 @@ const AuthService = {
   },
 
   signin: async (userCredentials: UserCredentials): Promise<string> => {
-    const response = await axios.post(`${baseUrl}/auth/signin`, userCredentials);
+    const response = await axios.post(
+      `${baseUrl}/auth/signin`,
+      userCredentials
+    );
     return response.data.data.access_token;
   },
 

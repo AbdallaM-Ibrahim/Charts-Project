@@ -15,15 +15,16 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    /* Fixed height container with grid layout for proper scaling */
-    <header className='w-full relative min-h-[80px] grid grid-rows-1 grid-cols-1'>
+    /* Changed from grid to flex, adjusted height for responsiveness */
+    <header className='w-full relative h-16 md:h-20 flex items-center'>
       {/* Background with proper sizing - fills the entire area */}
-      <div className='row-span-full col-span-full relative overflow-hidden w-full h-full'>
+      <div className='absolute inset-0 overflow-hidden w-full h-40'>
         <HeaderBackground className='w-full h-full' />
       </div>
 
-      {/* Content layer - same grid area with higher z-index */}
-      <div className='z-10 container mx-auto px-4 pt-4 pb-8 row-span-full col-span-full relative'>
+      {/* Content layer - adjusted padding */}
+      {/* Background Size dependent on the padding of the next Element */}
+      <div className='z-10 container mx-auto mt-8 px-4 md:mt-12 relative w-full'>
         <div className='flex items-center justify-between flex-wrap'>
           <RouterLink
             to='/'

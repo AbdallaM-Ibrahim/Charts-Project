@@ -4,6 +4,8 @@ import { useAppDispatch, useAppSelector } from '../hooks/store.hooks';
 import type { User } from '../services/auth.service';
 import { useEffect } from 'react';
 import { selectToken } from '../store/features/user.slice';
+import Input from '../components/primitive/input';
+import RafikiSvg from '../assets/rafiki.svg';
 
 const Register = () => {
   const dispatch = useAppDispatch();
@@ -20,8 +22,7 @@ const Register = () => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const user: Partial<User> = {
-      firstName: data.get('firstName') as string,
-      lastName: data.get('lastName') as string,
+      name: data.get('name') as string,
       email: data.get('email') as string,
       password: data.get('password') as string,
     };
@@ -30,109 +31,126 @@ const Register = () => {
   };
 
   return (
-    <div className='w-full max-w-md mx-auto px-4'>
-      <div className='mt-8 flex flex-col items-center'>
-        <h1 className='mt-4 text-2xl font-medium'>Register</h1>
+    <div className='flex justify-center px-4 py-10 md:min-h-[700px] md:items-center'>
+      <div className='flex flex-col md:flex-row max-w-7xl items-center justify-center w-full'>
+        <div className='z-10 flex order-1 md:order-2 md:w-1/2'>
+          <img
+            src={RafikiSvg}
+            alt='Illustration'
+            className='w-full h-auto max-w-2xl'
+          />
+        </div>
+        <div className='w-full max-w-md md:max-w-lg mx-auto order-2 md:order-1 md:w-1/2'>
+          {' '}
+          <div className='mt-2 flex flex-col items-center '>
+            <h1 className='mb-2 text-2xl font-medium'>Register</h1>
 
-        <form className='w-full mt-6' onSubmit={onSubmitHandle}>
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-            <div className='mb-4'>
-              <label
-                htmlFor='firstName'
-                className='block text-sm font-medium mb-1'
+            <form className='w-full mt-2' onSubmit={onSubmitHandle}>
+              <div className='mb-4'>
+                <label
+                  htmlFor='name'
+                  className='block text-sm font-medium mb-1'
+                >
+                  Full Name
+                </label>
+                <Input
+                  required
+                  id='name'
+                  name='name'
+                  type='text'
+                  autoComplete='name'
+                  placeholder='Emil John'
+                  autoFocus
+                  icon='/src/assets/person.svg' // Use person SVG icon path
+                />
+              </div>
+
+              <div className='mb-4'>
+                <label
+                  htmlFor='email'
+                  className='block text-sm font-medium mb-1'
+                >
+                  Email
+                </label>
+                <Input
+                  required
+                  id='email'
+                  name='email'
+                  type='email'
+                  autoComplete='email'
+                  placeholder='Enter your email'
+                  icon='/src/assets/email.svg' // Use email SVG icon path
+                />
+              </div>
+
+              <div className='mb-4'>
+                <label
+                  htmlFor='phone'
+                  className='block text-sm font-medium mb-1'
+                >
+                  Phone Number
+                </label>
+                <Input
+                  id='phone'
+                  name='phone'
+                  type='tel'
+                  autoComplete='tel'
+                  placeholder='Phone number'
+                  icon='/src/assets/phone.svg' // Use phone SVG icon path
+                />
+              </div>
+
+              <div className='mb-4'>
+                <label
+                  htmlFor='password'
+                  className='block text-sm font-medium mb-1'
+                >
+                  Create Password
+                </label>
+                <Input
+                  required
+                  id='password'
+                  name='password'
+                  type='password'
+                  autoComplete='new-password'
+                  placeholder='Password'
+                  icon='/src/assets/lock.svg' // Use lock SVG icon path
+                />
+              </div>
+
+              <div className='mb-4'>
+                <label
+                  htmlFor='confirmPassword'
+                  className='block text-sm font-medium mb-1'
+                >
+                  Confirm Password
+                </label>
+                <Input
+                  required
+                  id='confirmPassword'
+                  name='confirmPassword'
+                  type='password'
+                  autoComplete='new-password'
+                  placeholder='Password'
+                  icon='/src/assets/lock.svg' // Use lock SVG icon path
+                />
+              </div>
+
+              <button
+                type='submit'
+                className='w-full text-white bg-[#2C60EA] py-2 px-4 rounded-xl cursor-pointer focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-colors'
               >
-                First Name
-              </label>
-              <input
-                required
-                id='firstName'
-                name='firstName'
-                type='text'
-                autoComplete='given-name'
-                // biome-ignore lint/a11y/noAutofocus: <explanation>
-                autoFocus
-                className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:border-transparent'
-              />
-            </div>
+                Sign Up
+              </button>
 
-            <div className='mb-4'>
-              <label
-                htmlFor='lastName'
-                className='block text-sm font-medium mb-1'
-              >
-                Last Name
-              </label>
-              <input
-                required
-                id='lastName'
-                name='lastName'
-                type='text'
-                autoComplete='family-name'
-                className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:border-transparent'
-              />
-            </div>
+              <div className='mt-4 flex justify-end'>
+                <RouterLink to='/signin' className='text-sm  hover:underline'>
+                  Already have an account? Sign in
+                </RouterLink>
+              </div>
+            </form>
           </div>
-
-          <div className='mb-4'>
-            <label htmlFor='email' className='block text-sm font-medium mb-1'>
-              Email
-            </label>
-            <input
-              required
-              id='email'
-              name='email'
-              type='email'
-              autoComplete='email'
-              className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent'
-            />
-          </div>
-
-          <div className='mb-4'>
-            <label
-              htmlFor='password'
-              className='block text-sm font-medium mb-1'
-            >
-              Password
-            </label>
-            <input
-              required
-              id='password'
-              name='password'
-              type='password'
-              autoComplete='new-password'
-              className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent'
-            />
-          </div>
-
-          <div className='flex items-center mb-4'>
-            <input
-              id='allowExtraEmails'
-              name='allowExtraEmails'
-              type='checkbox'
-              className='h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded'
-            />
-            <label htmlFor='allowExtraEmails' className='ml-2 block text-sm'>
-              I want to receive inspiration, marketing promotions and updates
-              via email.
-            </label>
-          </div>
-
-          <button
-            type='submit'
-            className='w-full text-white bg-[#2C60EA] py-2 px-4 rounded-md cursor-pointer focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-colors'
-          >
-            Sign Up
-          </button>
-
-          <div className='mt-4 flex justify-end'>
-            <RouterLink
-              to='/signin'
-              className='text-sm  hover:underline'
-            >
-              Already have an account? Sign in
-            </RouterLink>
-          </div>
-        </form>
+        </div>
       </div>
     </div>
   );

@@ -1,20 +1,18 @@
-import { createSelector, type PayloadAction } from "@reduxjs/toolkit";
+import { createSelector, type PayloadAction } from '@reduxjs/toolkit';
 
-import { createAppSlice } from "../create-slice";
+import { createAppSlice } from '../create-slice';
 
 export interface UserState {
   id: number | null;
   email: string | null;
-  firstName: string | null;
-  lastName: string | null;
+  name: string | null;
   token: string | null;
 }
 
 const initialState: UserState = {
   id: null,
   email: null,
-  firstName: null,
-  lastName: null,
+  name: null,
   token: null,
 };
 
@@ -26,16 +24,14 @@ export const userSlice = createAppSlice({
       (state, action: PayloadAction<Partial<UserState>>) => {
         state.id = action.payload.id ?? state.id;
         state.email = action.payload.email ?? state.email;
-        state.firstName = action.payload.firstName ?? state.firstName;
-        state.lastName = action.payload.lastName ?? state.lastName;
+        state.name = action.payload.name ?? state.name;
         state.token = action.payload.token ?? state.token;
       }
     ),
     removeUser: create.reducer((state) => {
       state.id = initialState.id;
       state.email = initialState.email;
-      state.firstName = initialState.firstName;
-      state.lastName = initialState.lastName;
+      state.name = initialState.name;
       state.token = initialState.token;
     }),
     setToken: create.reducer((state, action: PayloadAction<string>) => {
