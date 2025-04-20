@@ -1,6 +1,6 @@
 import type React from 'react';
 import { useEffect } from 'react';
-import './App.css';
+// import './App.css';
 import { MyRouter } from './MyRouter';
 import { useAppDispatch, useAppSelector } from './hooks/store.hooks';
 import { getSelf } from './store/features/user.actions';
@@ -22,9 +22,9 @@ const App: React.FC = () => {
   }, [token, user.id, dispatch]);
 
   return (
-    <div className='min-h-screen bg-white text-gray-900'>
+    <div className='flex flex-col min-h-screen bg-white text-gray-900'>
       <MyRouter />
-      <footer className='text-center mt-8 py-4'>
+      <footer className='text-center py-4 mt-auto text-sm'>
         <p>
           Made with{' '}
           <span role='img' aria-label='React'>
@@ -33,7 +33,7 @@ const App: React.FC = () => {
           by{' '}
           <a
             href='mailto:futuresolve.tech@gmail.com?subject=Contact from Charts Project'
-            className='text-purple-600 hover:underline'
+            className='hover:underline text-inherit'
           >
             FutureSolve
           </a>

@@ -20,7 +20,7 @@ export const MyRouter: React.FC<React.PropsWithChildren> = () => {
       <Navbar/>
       <Routes>
         <Route
-          path='/'
+          path='/*'
           element={token ? <Home /> : <Navigate replace to='/signin' />}
         />
         <Route path='/signin' element={<Signin />} />

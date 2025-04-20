@@ -22,10 +22,11 @@ const NavButton: React.FC<NavButtonProps> = ({
         <button
           type='button'
           className={`
+            px-4 py-2 rounded-md font-medium
             ${
               isActive
-                ? 'text-white font-medium border border-white px-4 py-2 rounded-md'
-                : 'px-4 py-2 border border-white rounded-md bg-transparent text-white hover:bg-white hover:text-purple-700 transition-colors'
+                ? 'text-black border border-[#EFF2F4] bg-[#EFF2F4]'
+                : 'text-white border border-white bg-[#2C60EA] hover:bg-[#1A4B9A] cursor-pointer'
             }
             ${className}
           `}

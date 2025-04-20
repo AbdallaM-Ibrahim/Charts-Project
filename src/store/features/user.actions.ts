@@ -1,8 +1,8 @@
-import { Dispatch, PayloadAction } from "@reduxjs/toolkit";
+import type { Dispatch, PayloadAction } from "@reduxjs/toolkit";
 
-import AuthService, { User } from "../../services/auth.service";
-import { AppThunk } from "../index";
-import { UserState, setToken, setUser, removeUser } from "./user.slice";
+import AuthService, { type User } from "../../services/auth.service";
+import type { AppThunk } from "../index";
+import { type UserState, setToken, setUser, removeUser } from "./user.slice";
 
 export const getSelf =
   (token: string): AppThunk =>
@@ -12,9 +12,9 @@ export const getSelf =
   };
 
 export const signIn =
-  (username: string, password: string): AppThunk =>
+  (email: string, password: string): AppThunk =>
   async (dispatch: Dispatch<PayloadAction<string | Partial<UserState>>>) => {
-    const token = await AuthService.signin({ username, password });
+    const token = await AuthService.signin({ email, password });
     const user = await AuthService.getProfile(token);
     dispatch(setToken(token));
     localStorage.setItem("token", token);

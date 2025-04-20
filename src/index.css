@@ -1,11 +1,9 @@
-@tailwind/preflight;
-@tailwind utilities;
-@tailwind/postcss;
+@import 'tailwindcss';
 
 /* Keep some of the existing custom styles */
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  color: #213547;
+  color: #000;
   background-color: #ffffff;
   font-synthesis: none;
   text-rendering: optimizeLegibility;

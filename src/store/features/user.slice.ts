@@ -1,10 +1,10 @@
-import { PayloadAction } from "@reduxjs/toolkit";
+import { createSelector, type PayloadAction } from "@reduxjs/toolkit";
 
 import { createAppSlice } from "../create-slice";
 
 export interface UserState {
   id: number | null;
-  username: string | null;
+  email: string | null;
   firstName: string | null;
   lastName: string | null;
   token: string | null;
@@ -12,26 +12,28 @@ export interface UserState {
 
 const initialState: UserState = {
   id: null,
-  username: null,
+  email: null,
   firstName: null,
   lastName: null,
   token: null,
 };
 
 export const userSlice = createAppSlice({
-  name: "user",
+  name: 'user',
   initialState,
   reducers: (create) => ({
-    setUser: create.reducer((state, action: PayloadAction<Partial<UserState>>) => {
-      state.id = action.payload.id ?? state.id;
-      state.username = action.payload.username ?? state.username;
-      state.firstName = action.payload.firstName ?? state.firstName;
-      state.lastName = action.payload.lastName ?? state.lastName;
-      state.token = action.payload.token ?? state.token;
-    }),
+    setUser: create.reducer(
+      (state, action: PayloadAction<Partial<UserState>>) => {
+        state.id = action.payload.id ?? state.id;
+        state.email = action.payload.email ?? state.email;
+        state.firstName = action.payload.firstName ?? state.firstName;
+        state.lastName = action.payload.lastName ?? state.lastName;
+        state.token = action.payload.token ?? state.token;
+      }
+    ),
     removeUser: create.reducer((state) => {
       state.id = initialState.id;
-      state.username = initialState.username;
+      state.email = initialState.email;
       state.firstName = initialState.firstName;
       state.lastName = initialState.lastName;
       state.token = initialState.token;
@@ -44,16 +46,31 @@ export const userSlice = createAppSlice({
     }),
   }),
   selectors: {
-    selectUser: (userSlice) => {
-      return { ...userSlice, token: undefined };
-    },
-    selectUsername: (userSlice) => userSlice.username,
+    // Select the entire user slice state
+    _selectUserState: (userSlice) => userSlice,
+
+    // Memoized selector for user data without the token
+    selectUser: createSelector<
+      [(state: UserState) => UserState],
+      Omit<UserState, 'token'>
+    >(
+      // Input selector(s)
+      [(state) => state], // Select the whole user slice state directly
+      // Result function: receives the result of input selectors
+      (userSlice) => {
+        // This computation now only runs if userSlice changes
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { token: _token, ...userWithoutToken } = userSlice;
+        return userWithoutToken;
+      }
+    ),
+    selectEmail: (userSlice) => userSlice.email,
     selectToken: (userSlice) => userSlice.token,
   },
 });
 
 export const { setUser, removeUser, setToken, removeToken } = userSlice.actions;
 
-export const { selectUser, selectUsername, selectToken } = userSlice.selectors;
+export const { selectUser, selectEmail, selectToken } = userSlice.selectors;
 
 export default userSlice.reducer;

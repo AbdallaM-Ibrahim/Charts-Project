@@ -1,3 +1,4 @@
 {
   "tailwindCSS.experimental.configFile": "./src/index.css",
+  "cSpell.words": ["Instalyze"]
 }

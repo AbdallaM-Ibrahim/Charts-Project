@@ -3,7 +3,6 @@ import { signIn } from '../store/features/user.actions';
 import { useAppDispatch, useAppSelector } from '../hooks/store.hooks';
 import { useEffect } from 'react';
 import { selectToken } from '../store/features/user.slice';
-import LockIcon from '../components/icons/LockIcon';
 
 const Signin: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -19,37 +18,34 @@ const Signin: React.FC = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const username = data.get('username') as string;
+    const email = data.get('email') as string;
     const password = data.get('password') as string;
 
-    dispatch(signIn(username, password));
+    dispatch(signIn(email, password));
   };
 
   return (
     <div className='w-full max-w-md mx-auto px-4'>
       <div className='mt-8 flex flex-col items-center'>
-        <div className='w-12 h-12 rounded-full bg-purple-600 flex items-center justify-center text-white'>
-          <LockIcon />
-        </div>
-
         <h1 className='mt-4 text-2xl font-medium'>Sign in</h1>
 
         <form className='w-full mt-4' onSubmit={handleSubmit}>
           <div className='mb-4'>
             <label
-              htmlFor='username'
+              htmlFor='email'
               className='block text-sm font-medium mb-1'
             >
-              Username
+              Email
             </label>
             <input
               required
-              id='username'
-              name='username'
-              type='text'
-              autoComplete='username'
+              id='email'
+              name='email'
+              type='email'
+              autoComplete='email'
+              // biome-ignore lint/a11y/noAutofocus: <explanation>
               autoFocus
-              className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent'
+              className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2  focus:border-transparent'
             />
           </div>
 
@@ -66,7 +62,7 @@ const Signin: React.FC = () => {
               name='password'
               type='password'
               autoComplete='current-password'
-              className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent'
+              className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:border-transparent'
             />
           </div>
 
@@ -75,7 +71,7 @@ const Signin: React.FC = () => {
               id='remember'
               name='remember'
               type='checkbox'
-              className='h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded'
+              className='h-4 w-4 border-gray-300 rounded'
             />
             <label htmlFor='remember' className='ml-2 block text-sm'>
               Remember me
@@ -84,22 +80,16 @@ const Signin: React.FC = () => {
 
           <button
             type='submit'
-            className='w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-colors'
+            className='w-full bg-[#2C60EA] text-white py-2 px-4 rounded-md hover:bg-[#1A4B9A] focus:outline-none cursor-pointer focus:ring-1 focus:ring-[#2C60EA] focus:ring-offset-2 transition-colors'
           >
             Sign In
           </button>
 
           <div className='mt-4 flex justify-between'>
-            <RouterLink
-              to='/'
-              className='text-sm text-purple-600 hover:underline'
-            >
+            <RouterLink to='/' className='text-sm hover:underline'>
               Forgot password?
             </RouterLink>
-            <RouterLink
-              to='/register'
-              className='text-sm text-purple-600 hover:underline'
-            >
+            <RouterLink to='/register' className='text-sm hover:underline'>
               Don't have an account? Sign Up
             </RouterLink>
           </div>

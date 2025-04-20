@@ -1,10 +1,9 @@
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { register } from '../store/features/user.actions';
 import { useAppDispatch, useAppSelector } from '../hooks/store.hooks';
-import { User } from '../services/auth.service';
+import type { User } from '../services/auth.service';
 import { useEffect } from 'react';
 import { selectToken } from '../store/features/user.slice';
-import LockIcon from '../components/icons/LockIcon';
 
 const Register = () => {
   const dispatch = useAppDispatch();
@@ -23,7 +22,7 @@ const Register = () => {
     const user: Partial<User> = {
       firstName: data.get('firstName') as string,
       lastName: data.get('lastName') as string,
-      username: data.get('username') as string,
+      email: data.get('email') as string,
       password: data.get('password') as string,
     };
 
@@ -33,10 +32,6 @@ const Register = () => {
   return (
     <div className='w-full max-w-md mx-auto px-4'>
       <div className='mt-8 flex flex-col items-center'>
-        <div className='w-12 h-12 rounded-full bg-purple-600 flex items-center justify-center text-white'>
-          <LockIcon />
-        </div>
-
         <h1 className='mt-4 text-2xl font-medium'>Register</h1>
 
         <form className='w-full mt-6' onSubmit={onSubmitHandle}>
@@ -54,8 +49,9 @@ const Register = () => {
                 name='firstName'
                 type='text'
                 autoComplete='given-name'
+                // biome-ignore lint/a11y/noAutofocus: <explanation>
                 autoFocus
-                className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent'
+                className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:border-transparent'
               />
             </div>
 
@@ -72,24 +68,21 @@ const Register = () => {
                 name='lastName'
                 type='text'
                 autoComplete='family-name'
-                className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent'
+                className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:border-transparent'
               />
             </div>
           </div>
 
           <div className='mb-4'>
-            <label
-              htmlFor='username'
-              className='block text-sm font-medium mb-1'
-            >
-              Username
+            <label htmlFor='email' className='block text-sm font-medium mb-1'>
+              Email
             </label>
             <input
               required
-              id='username'
-              name='username'
-              type='text'
-              autoComplete='username'
+              id='email'
+              name='email'
+              type='email'
+              autoComplete='email'
               className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent'
             />
           </div>
@@ -126,7 +119,7 @@ const Register = () => {
 
           <button
             type='submit'
-            className='w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-colors'
+            className='w-full text-white bg-[#2C60EA] py-2 px-4 rounded-md cursor-pointer focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-colors'
           >
             Sign Up
           </button>
@@ -134,7 +127,7 @@ const Register = () => {
           <div className='mt-4 flex justify-end'>
             <RouterLink
               to='/signin'
-              className='text-sm text-purple-600 hover:underline'
+              className='text-sm  hover:underline'
             >
               Already have an account? Sign in
             </RouterLink>

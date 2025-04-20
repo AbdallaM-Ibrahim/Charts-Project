@@ -3,7 +3,7 @@ const baseUrl = "http://localhost:3000/api";
 
 export type UserCredentials = {
   id?: number;
-  username: string;
+  email: string;
   password: string;
 };
 
