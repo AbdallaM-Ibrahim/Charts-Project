@@ -1,5 +1,5 @@
 import axios from 'axios';
-const baseUrl = 'http://localhost:3000/api';
+import { apiUrl } from '../config/env';
 
 export type UserCredentials = {
   id?: number;
@@ -17,22 +17,19 @@ export type User = UserCredentials & {
 
 const AuthService = {
   getProfile: async (token: string): Promise<Partial<User>> => {
-    const response = await axios.get(`${baseUrl}/users/self`, {
+    const response = await axios.get(`${apiUrl}/users/self`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     return response.data.data;
   },
 
   signin: async (userCredentials: UserCredentials): Promise<string> => {
-    const response = await axios.post(
-      `${baseUrl}/auth/signin`,
-      userCredentials
-    );
+    const response = await axios.post(`${apiUrl}/auth/signin`, userCredentials);
     return response.data.data.access_token;
   },
 
   register: async (newUser: Partial<User>): Promise<string> => {
-    const response = await axios.post(`${baseUrl}/auth/signup`, newUser);
+    const response = await axios.post(`${apiUrl}/auth/signup`, newUser);
     return response.data.data.access_token;
   },
 };
