@@ -47,7 +47,7 @@ const apiUrl = import.meta.env.VITE_API_URL;
 // Using the config helper (recommended)
 import { apiUrl, config } from './config/env';
 
-console.log(apiUrl); // http://localhost:3000/api
+console.log(apiUrl); // http://localhost:3000
 console.log(config.debug); // true/false (boolean)
 ```
 
@@ -62,7 +62,7 @@ console.log(config.debug); // true/false (boolean)
 2. Edit `.env.local` with your local settings:
 
    ```env
-   VITE_API_URL=http://localhost:8080/api
+   VITE_API_URL=http://localhost:8080
    VITE_DEBUG=true
    ```
 

@@ -38,7 +38,7 @@ export const mode = import.meta.env.MODE;
 // Export configuration object
 export const config: Config = {
   // Example: Make API URL required in production
-  apiUrl: getEnvVar('VITE_API_URL', 'http://localhost:3000/api', isProduction),
+  apiUrl: getEnvVar('VITE_API_URL', 'http://localhost:3000', isProduction),
   appName: getEnvVar('VITE_APP_NAME', 'Charts Project'),
   appVersion: getEnvVar('VITE_APP_VERSION', '1.0.0'),
   debug: parseBool(getEnvVar('VITE_DEBUG', 'false')),

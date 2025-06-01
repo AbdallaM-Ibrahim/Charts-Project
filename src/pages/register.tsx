@@ -1,7 +1,7 @@
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { register } from '../store/features/user.actions';
 import { useAppDispatch, useAppSelector } from '../hooks/store.hooks';
-import type { User } from '../services/auth.service';
+import type { UserRegister } from '../services/auth.service';
 import { useEffect } from 'react';
 import { selectToken } from '../store/features/user.slice';
 import Input from '../components/primitive/input';
@@ -21,10 +21,11 @@ const Register = () => {
   const onSubmitHandle = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const user: Partial<User> = {
-      name: data.get('name') as string,
+    const user: UserRegister = {
+      fullName: data.get('fullName') as string,
       email: data.get('email') as string,
       password: data.get('password') as string,
+      phone: data.get('phone') as string | undefined,
     };
 
     dispatch(register(user));
@@ -48,17 +49,17 @@ const Register = () => {
             <form className='w-full mt-2' onSubmit={onSubmitHandle}>
               <div className='mb-4'>
                 <label
-                  htmlFor='name'
+                  htmlFor='fullName'
                   className='block text-sm font-medium mb-1'
                 >
                   Full Name
                 </label>
                 <Input
                   required
-                  id='name'
-                  name='name'
+                  id='fullName'
+                  name='fullName'
                   type='text'
-                  autoComplete='name'
+                  autoComplete='fullName'
                   placeholder='Emil John'
                   autoFocus
                   icon='/src/assets/person.svg' // Use person SVG icon path

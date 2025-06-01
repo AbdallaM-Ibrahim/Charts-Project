@@ -19,7 +19,7 @@ This project uses environment variables for configuration. To get started:
 
 2. Edit `.env.local` with your settings:
    ```env
-   VITE_API_URL=http://localhost:3000/api
+   VITE_API_URL=http://localhost:3000
    VITE_DEBUG=true
    ```
 

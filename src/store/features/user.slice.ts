@@ -5,14 +5,16 @@ import { createAppSlice } from '../create-slice';
 export interface UserState {
   id: number | null;
   email: string | null;
-  name: string | null;
+  fullName: string | null;
+  phone?: string | null;
   token: string | null;
 }
 
 const initialState: UserState = {
   id: null,
   email: null,
-  name: null,
+  fullName: null,
+  phone: null,
   token: null,
 };
 
@@ -24,14 +26,16 @@ export const userSlice = createAppSlice({
       (state, action: PayloadAction<Partial<UserState>>) => {
         state.id = action.payload.id ?? state.id;
         state.email = action.payload.email ?? state.email;
-        state.name = action.payload.name ?? state.name;
+        state.fullName = action.payload.fullName ?? state.fullName;
+        state.phone = action.payload.phone ?? state.phone;
         state.token = action.payload.token ?? state.token;
       }
     ),
     removeUser: create.reducer((state) => {
       state.id = initialState.id;
       state.email = initialState.email;
-      state.name = initialState.name;
+      state.fullName = initialState.fullName;
+      state.phone = initialState.phone;
       state.token = initialState.token;
     }),
     setToken: create.reducer((state, action: PayloadAction<string>) => {
@@ -46,10 +50,7 @@ export const userSlice = createAppSlice({
     _selectUserState: (userSlice) => userSlice,
 
     // Memoized selector for user data without the token
-    selectUser: createSelector<
-      [(state: UserState) => UserState],
-      Omit<UserState, 'token'>
-    >(
+    selectUser: createSelector<[(state: UserState) => UserState], Omit<UserState, 'token'>>(
       // Input selector(s)
       [(state) => state], // Select the whole user slice state directly
       // Result function: receives the result of input selectors
@@ -62,11 +63,12 @@ export const userSlice = createAppSlice({
     ),
     selectEmail: (userSlice) => userSlice.email,
     selectToken: (userSlice) => userSlice.token,
+    selectPhone: (userSlice) => userSlice.phone,
   },
 });
 
 export const { setUser, removeUser, setToken, removeToken } = userSlice.actions;
 
-export const { selectUser, selectEmail, selectToken } = userSlice.selectors;
+export const { selectUser, selectEmail, selectToken, selectPhone } = userSlice.selectors;
 
 export default userSlice.reducer;

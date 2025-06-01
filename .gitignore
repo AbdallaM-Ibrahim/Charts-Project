@@ -1,4 +1,5 @@
 .hintrc
+docs/
 
 # Environment files
 .env.local
