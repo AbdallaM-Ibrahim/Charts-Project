@@ -4,13 +4,17 @@ import { selectUser } from '../store/features/user.slice';
 const Home: React.FC = () => {
   const user = useAppSelector(selectUser);
 
-  // useEffect(() => {}, [user.token, user.fullName]);
-
   return (
-    <div className='w-full max-w-md mx-auto px-4'>
-      <div className='mt-16 flex flex-col items-center'>
-        <h1 className='text-2xl font-medium mb-4'>Home Page</h1>
-        <h2 className='text-xl'>Hello, {user.fullName || 'User'}!</h2>
+    <div className='p-6'>
+      <h1 className='text-3xl font-bold text-gray-800 mb-4'>Home</h1>
+      <div className='bg-white rounded-lg shadow p-6'>
+        <h2 className='text-xl font-semibold mb-2'>
+          Welcome back, {user.fullName || 'User'}!
+        </h2>
+        <p className='text-gray-600'>
+          Welcome to your dashboard. Use the navigation menu to explore
+          different sections.
+        </p>
       </div>
     </div>
   );

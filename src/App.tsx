@@ -24,7 +24,7 @@ const App: React.FC = () => {
   return (
     <div className='flex flex-col min-h-screen bg-[#EFF2F4] text-gray-900'>
       <MyRouter />
-      <footer className='text-center py-4 mt-auto text-sm'>
+      <footer className='text-center my-auto text-sm max-h-[70px]'>
         <p>
           Made with{' '}
           <span role='img' aria-label='React'>
