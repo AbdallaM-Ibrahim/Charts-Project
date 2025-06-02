@@ -1,8 +1,6 @@
 import type React from 'react';
 import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-import { useAppSelector } from '../hooks/store.hooks';
-import { selectUser } from '../store/features/user.slice';
 import HomeIcon from './icons/HomeIcon';
 import AnalyticsIcon from './icons/AnalyticsIcon';
 import DatabaseIcon from './icons/DatabaseIcon';
@@ -48,7 +46,6 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
 
 const Drawer: React.FC = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const user = useAppSelector(selectUser);
 
   // Collapse drawer by default on small screens
   useEffect(() => {
