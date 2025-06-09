@@ -19,9 +19,11 @@ export type UserData = User & {
   token?: string; // Optional token for session management
 };
 
-export type UserRegister = UserCredentials & {
+export type UserRegister = {
   fullName: string;
-  phone?: string;
+  email: string;
+  phone: string;
+  password: string;
 };
 
 // Store user data in memory for the session (since API doesn't provide user profile endpoint)
@@ -76,19 +78,22 @@ const AuthService = {
       // Handle API errors according to OpenAPI specification
       if (error instanceof AxiosError && error.response) {
         const { status, data } = error.response;
-
         if (status === 400) {
           // API returns different messages for different 400 errors
           const message = data.message || 'Login failed';
           if (message === 'Email and password are required') {
             throw new Error('Email and password are required');
-          } else if (message === 'User not found') {
+          }
+          if (message === 'User not found') {
             throw new Error('User not found');
-          } else if (message === 'Invalid Email or Password') {
+          }
+          if (message === 'Invalid Email or Password') {
             throw new Error('Invalid email or password');
           }
           throw new Error(message);
-        } else if (status === 500) {
+        }
+
+        if (status === 500) {
           throw new Error('Server error occurred. Please try again later.');
         }
       }
@@ -142,17 +147,19 @@ const AuthService = {
       // Handle API errors according to OpenAPI specification
       if (error instanceof AxiosError && error.response) {
         const { status, data } = error.response;
-
         if (status === 400) {
           // API returns different messages for different 400 errors
           const message = data.message || 'Registration failed';
           if (message === 'All fields are required') {
             throw new Error('All fields are required');
-          } else if (message === 'User already exists') {
+          }
+          if (message === 'User already exists') {
             throw new Error('An account with this email already exists');
           }
           throw new Error(message);
-        } else if (status === 500) {
+        }
+
+        if (status === 500) {
           throw new Error('Server error occurred. Please try again later.');
         }
       }
