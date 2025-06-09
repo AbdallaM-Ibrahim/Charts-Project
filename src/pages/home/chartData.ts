@@ -17,8 +17,8 @@ export const salesDistributionData2: PieChartData = {
 };
 
 export const inventoryLevelsData: AreaChartData = {
-  labels: ['Product A', 'Product B', 'Product C'],
-  data: [800, 1600, 1200],
+  labels: ['Product A', 'Product B', 'Product C', 'Product D'],
+  data: [1100, 800, 1400, 400],
   label: 'Inventory Levels',
   backgroundColor: 'rgba(59, 130, 246, 0.1)',
   borderColor: '#3B82F6',
