@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import type React from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import FileService from '../../services/file.service';
 
@@ -107,12 +108,12 @@ const ImportSection: React.FC<ImportSectionProps> = ({ className = '' }) => {
   // Clean up object URLs
   useEffect(() => {
     return () => {
-      files.forEach((file) => {
+      for (const file of files) {
         const fileWithPreview = file as FileWithPreview;
         if (fileWithPreview.preview) {
           URL.revokeObjectURL(fileWithPreview.preview);
         }
-      });
+      }
     };
   }, [files]);
 
@@ -143,6 +144,7 @@ const ImportSection: React.FC<ImportSectionProps> = ({ className = '' }) => {
                 viewBox='0 0 24 24'
                 xmlns='http://www.w3.org/2000/svg'
               >
+                <title>Upload Icon</title>
                 <path
                   strokeLinecap='round'
                   strokeLinejoin='round'
@@ -187,7 +189,7 @@ const ImportSection: React.FC<ImportSectionProps> = ({ className = '' }) => {
       {uploading && (
         <div className='mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg'>
           <div className='flex items-center'>
-            <div className='animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2'></div>
+            <div className='animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2' />
             <span className='text-blue-700'>Uploading...</span>
           </div>
         </div>
@@ -214,6 +216,7 @@ const ImportSection: React.FC<ImportSectionProps> = ({ className = '' }) => {
           <div className='space-y-2'>
             {files.map((file, index) => (
               <div
+                // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
                 key={index}
                 className='flex items-center justify-between p-3 bg-gray-50 rounded-lg border'
               >
@@ -224,6 +227,7 @@ const ImportSection: React.FC<ImportSectionProps> = ({ className = '' }) => {
                     stroke='currentColor'
                     viewBox='0 0 24 24'
                   >
+                    <title>File Icon</title>
                     <path
                       strokeLinecap='round'
                       strokeLinejoin='round'
@@ -244,7 +248,7 @@ const ImportSection: React.FC<ImportSectionProps> = ({ className = '' }) => {
                   onClick={clearFiles}
                   className='text-red-500 hover:text-red-700 transition-colors'
                   aria-label='Remove file'
-                  title='Remove file'
+                  type='button'
                 >
                   <svg
                     className='w-4 h-4'
@@ -252,6 +256,7 @@ const ImportSection: React.FC<ImportSectionProps> = ({ className = '' }) => {
                     stroke='currentColor'
                     viewBox='0 0 24 24'
                   >
+                    <title>Remove file</title>
                     <path
                       strokeLinecap='round'
                       strokeLinejoin='round'
