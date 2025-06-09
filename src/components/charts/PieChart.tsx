@@ -24,6 +24,7 @@ const PieChart: React.FC<PieChartProps> = ({
   showLabels = false,
   onSegmentClick,
 }) => {
+  showLabels;
   const chartConfig: ChartConfiguration<'pie'> = {
     type: 'pie',
     data: {
@@ -99,20 +100,6 @@ const PieChart: React.FC<PieChartProps> = ({
       {/* <h4 className='text-md text-gray-600 mb-6'>{subtitle}</h4> */}
       <div className='relative h-48'>
         <canvas ref={canvasRef} />
-        {showLabels && (
-          <div className='absolute inset-0 flex items-center justify-center'>
-            <div className='text-center'>
-              <div className='flex items-center justify-around mt-16'>
-                <div className='text-sm text-gray-600'>15</div>
-                <div className='text-sm text-gray-600'>35</div>
-              </div>
-              <div className='flex items-center justify-around mt-8'>
-                <div className='text-sm text-gray-600'>20</div>
-                <div className='text-sm text-gray-600'>25</div>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
