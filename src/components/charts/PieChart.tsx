@@ -24,7 +24,6 @@ const PieChart: React.FC<PieChartProps> = ({
   showLabels = false,
   onSegmentClick,
 }) => {
-  showLabels;
   const chartConfig: ChartConfiguration<'pie'> = {
     type: 'pie',
     data: {
@@ -46,7 +45,17 @@ const PieChart: React.FC<PieChartProps> = ({
       maintainAspectRatio: false,
       plugins: {
         legend: {
-          display: false,
+          display: showLabels,
+          position: 'bottom',
+          labels: {
+            color: '#4a5568', // Tailwind gray-700
+            font: {
+              size: 14,
+              weight: 500,
+            },
+            usePointStyle: true,
+            pointStyle: 'circle',
+          },
         },
         tooltip: {
           enabled: true,

@@ -4,8 +4,6 @@ import {
   salesDistributionData,
   salesDistributionData2,
   inventoryLevelsData,
-  handleSalesChartClick,
-  handleInventoryChartClick,
 } from './chartData';
 
 const Home: React.FC = () => {
@@ -75,8 +73,6 @@ const Home: React.FC = () => {
           <PieChart
             title='Product Sales Distribution'
             data={salesDistributionData}
-            showLabels={true}
-            onSegmentClick={handleSalesChartClick}
           />
 
           {/* Current Inventory Levels Chart */}
@@ -84,15 +80,12 @@ const Home: React.FC = () => {
             title='Current Inventory Levels'
             data={inventoryLevelsData}
             maxValue={2000}
-            onPointClick={handleInventoryChartClick}
           />
 
           {/* Product Sales Distribution Chart 2 */}
           <PieChart
             title='Product Sales Distribution'
             data={salesDistributionData2}
-            showLabels={true}
-            onSegmentClick={handleSalesChartClick}
           />
         </div>{' '}
         {/* Start Analyze Button */}

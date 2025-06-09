@@ -26,12 +26,3 @@ export const inventoryLevelsData: AreaChartData = {
   xAxisLabel: 'Products',
   yAxisLabel: 'Units',
 };
-
-// Chart click handlers
-export const handleSalesChartClick = (label: string, value: number) => {
-  console.log('Clicked on:', label, 'Value:', value);
-};
-
-export const handleInventoryChartClick = (label: string, value: number) => {
-  console.log('Clicked on:', label, 'Inventory:', value, 'units');
-};
