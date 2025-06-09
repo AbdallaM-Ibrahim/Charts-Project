@@ -73,8 +73,7 @@ const Home: React.FC = () => {
         <div className='grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12'>
           {/* Product Sales Distribution Chart 1 */}
           <PieChart
-            title='Product Sales'
-            subtitle='Distribution'
+            title='Product Sales Distribution'
             data={salesDistributionData}
             showLabels={true}
             onSegmentClick={handleSalesChartClick}
@@ -82,8 +81,7 @@ const Home: React.FC = () => {
 
           {/* Current Inventory Levels Chart */}
           <AreaChart
-            title='Current Inventory'
-            subtitle='Levels'
+            title='Current Inventory Levels'
             data={inventoryLevelsData}
             maxValue={2000}
             onPointClick={handleInventoryChartClick}
@@ -91,8 +89,7 @@ const Home: React.FC = () => {
 
           {/* Product Sales Distribution Chart 2 */}
           <PieChart
-            title='Product Sales'
-            subtitle='Distribution'
+            title='Product Sales Distribution'
             data={salesDistributionData2}
             showLabels={true}
             onSegmentClick={handleSalesChartClick}

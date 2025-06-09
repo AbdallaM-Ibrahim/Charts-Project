@@ -11,7 +11,6 @@ export interface PieChartData {
 
 interface PieChartProps {
   title: string;
-  subtitle: string;
   data: PieChartData;
   className?: string;
   showLabels?: boolean;
@@ -20,7 +19,6 @@ interface PieChartProps {
 
 const PieChart: React.FC<PieChartProps> = ({
   title,
-  subtitle,
   data,
   className = '',
   showLabels = false,
@@ -97,8 +95,8 @@ const PieChart: React.FC<PieChartProps> = ({
 
   return (
     <div className={`bg-gray-50 rounded-xl p-6 ${className}`}>
-      <h3 className='text-lg font-semibold text-gray-900 mb-1'>{title}</h3>
-      <h4 className='text-md text-gray-600 mb-6'>{subtitle}</h4>
+      <h3 className='text-lg  text-gray-600 mb-1 text-center'>{title}</h3>
+      {/* <h4 className='text-md text-gray-600 mb-6'>{subtitle}</h4> */}
       <div className='relative h-48'>
         <canvas ref={canvasRef} />
         {showLabels && (

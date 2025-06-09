@@ -23,6 +23,8 @@ export const inventoryLevelsData: AreaChartData = {
   backgroundColor: 'rgba(59, 130, 246, 0.1)',
   borderColor: '#3B82F6',
   pointBackgroundColor: '#3B82F6',
+  xAxisLabel: 'Products',
+  yAxisLabel: 'Units',
 };
 
 // Chart click handlers

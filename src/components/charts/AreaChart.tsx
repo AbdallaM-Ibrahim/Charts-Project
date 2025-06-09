@@ -9,11 +9,12 @@ export interface AreaChartData {
   backgroundColor?: string;
   borderColor?: string;
   pointBackgroundColor?: string;
+  xAxisLabel?: string;
+  yAxisLabel?: string;
 }
 
 interface AreaChartProps {
   title: string;
-  subtitle: string;
   data: AreaChartData;
   className?: string;
   maxValue?: number;
@@ -22,7 +23,6 @@ interface AreaChartProps {
 
 const AreaChart: React.FC<AreaChartProps> = ({
   title,
-  subtitle,
   data,
   className = '',
   maxValue = 2000,
@@ -72,6 +72,15 @@ const AreaChart: React.FC<AreaChartProps> = ({
               size: 10,
             },
           },
+          title: {
+            display: !!data.yAxisLabel,
+            text: data.yAxisLabel || '',
+            font: {
+              size: 12,
+              weight: 'bold',
+            },
+            color: '#374151',
+          },
         },
         x: {
           grid: {
@@ -81,6 +90,15 @@ const AreaChart: React.FC<AreaChartProps> = ({
             font: {
               size: 10,
             },
+          },
+          title: {
+            display: !!data.xAxisLabel,
+            text: data.xAxisLabel || '',
+            font: {
+              size: 12,
+              weight: 'bold',
+            },
+            color: '#374151',
           },
         },
       },
@@ -131,8 +149,7 @@ const AreaChart: React.FC<AreaChartProps> = ({
 
   return (
     <div className={`bg-gray-50 rounded-xl p-6 ${className}`}>
-      <h3 className='text-lg font-semibold text-gray-900 mb-1'>{title}</h3>
-      <h4 className='text-md text-gray-600 mb-6'>{subtitle}</h4>
+      <h3 className='text-lg text-gray-600 mb-1 text-center'>{title}</h3>
       <div className='relative h-48'>
         <canvas ref={canvasRef} />
       </div>
