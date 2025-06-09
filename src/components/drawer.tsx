@@ -92,7 +92,7 @@ const Drawer: React.FC = () => {
 
   return (
     <div
-      className={`bg-[#F9FBFD] transition-all duration-300 ease-in-out flex flex-col ${
+      className={`bg-[#F9FBFD] transition-all duration-300 ease-in-out rounded-xl flex flex-col ${
         isCollapsed ? 'w-24' : 'w-72'
       }`}
     >
@@ -110,6 +110,7 @@ const Drawer: React.FC = () => {
           onClick={toggleDrawer}
           className='p-2 rounded-lg hover:bg-gray-100 transition-colors'
           aria-label='Toggle drawer'
+          type='button'
         >
           <DoorArrowIcon
             className='w-5 h-5 text-[#2C60EA]'

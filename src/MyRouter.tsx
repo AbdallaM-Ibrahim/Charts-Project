@@ -26,7 +26,7 @@ export const MyRouter: React.FC<React.PropsWithChildren> = () => {
   }) => {
     return (
       // height should be screen minus footer height
-      <div className='flex min-h-[calc(100vh_-_70px)] bg-[#EFF2F4]'>
+      <div className='flex min-h-[calc(100vh_-_70px)] bg-[#EFF2F4] pt-6'>
         <Drawer />
         <main className='flex-1 overflow-y-auto'>{children}</main>
       </div>
@@ -42,7 +42,8 @@ export const MyRouter: React.FC<React.PropsWithChildren> = () => {
         <Route path='/register' element={<Register />} />
 
         {/* Protected routes */}
-        {token ? (
+        {
+          // token ?
           <>
             <Route
               path='/'
@@ -86,9 +87,10 @@ export const MyRouter: React.FC<React.PropsWithChildren> = () => {
             />
             <Route path='/*' element={<Navigate replace to='/' />} />
           </>
-        ) : (
-          <Route path='/*' element={<Navigate replace to='/signin' />} />
-        )}
+          //  : (
+          //   <Route path='/*' element={<Navigate replace to='/signin' />} />
+          // )
+        }
       </Routes>
     </Router>
   );
