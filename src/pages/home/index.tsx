@@ -14,25 +14,25 @@ const Home: React.FC = () => {
       title: 'Sales',
       description: 'Analyze sales performance, trends and inventory',
       icon: '📊',
-      bgColor: 'bg-blue-50',
-      borderColor: 'border-blue-200',
-      selected: true,
+      bgColor: 'bg-blue-100',
+      borderColor: 'hover:border-blue-400',
+      hoverColor: 'hover:bg-blue-200',
     },
     {
       title: 'Finance',
       description: 'Analyze budget, profit and loss',
       icon: '💰',
-      bgColor: 'bg-green-50',
-      borderColor: 'border-green-200',
-      selected: false,
+      bgColor: 'bg-green-100',
+      borderColor: 'hover:border-green-400',
+      hoverColor: 'hover:bg-green-200',
     },
     {
       title: 'Marketing',
       description: 'Analyze campaigns, web traffic and engagement',
       icon: '📢',
-      bgColor: 'bg-red-50',
-      borderColor: 'border-red-200',
-      selected: false,
+      bgColor: 'bg-red-100',
+      borderColor: 'hover:border-red-400',
+      hoverColor: 'hover:bg-red-200',
     },
   ];
 
@@ -44,21 +44,17 @@ const Home: React.FC = () => {
         <div className='mb-8'>
           <h1 className='text-3xl font-bold text-gray-900 mb-2'>Home</h1>
           <p className='text-gray-500'>Choose the domain to analyze</p>
-        </div>
+        </div>{' '}
         {/* Domain Cards */}{' '}
         <div className='grid grid-cols-1 md:grid-cols-3 gap-6 mb-12'>
           {domainCards.map((card) => (
             <div
               key={card.title}
-              className={`p-6 rounded-xl border-2 cursor-pointer transition-all duration-200 hover:shadow-md ${
-                card.selected
-                  ? `${card.bgColor} ${card.borderColor}`
-                  : 'bg-gray-50 border-gray-200 hover:bg-gray-100'
-              }`}
+              className={`p-8 rounded-2xl border-2 cursor-pointer transition-all duration-200 hover:shadow-lg ${card.bgColor} bg-white border-gray-200 ${card.hoverColor} border-gray-300 ${card.borderColor}`}
             >
               <div className='text-center'>
-                <div className='text-4xl mb-4'>{card.icon}</div>
-                <h3 className='text-xl font-semibold text-gray-900 mb-2'>
+                <div className='text-5xl mb-6'>{card.icon}</div>
+                <h3 className='text-xl font-bold text-gray-900 mb-3'>
                   {card.title}
                 </h3>
                 <p className='text-gray-600 text-sm leading-relaxed'>
