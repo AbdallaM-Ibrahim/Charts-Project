@@ -31,7 +31,7 @@ export const register =
     const userData = {
       id: 1,
       email: newUser.email,
-      fullName: newUser.fullName,
+      name: newUser.name,
       phone: newUser.phone || null,
       token,
     } as Partial<UserState>;

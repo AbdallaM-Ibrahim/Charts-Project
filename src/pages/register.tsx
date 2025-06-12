@@ -22,7 +22,7 @@ const Register = () => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const user: UserRegister = {
-      fullName: data.get('fullName') as string,
+      name: data.get('name') as string,
       email: data.get('email') as string,
       password: data.get('password') as string,
       phone: data.get('phone') as string | undefined,
@@ -49,17 +49,17 @@ const Register = () => {
             <form className='w-full mt-2' onSubmit={onSubmitHandle}>
               <div className='mb-4'>
                 <label
-                  htmlFor='fullName'
+                  htmlFor='name'
                   className='block text-sm font-medium mb-1'
                 >
                   Full Name
                 </label>
                 <Input
                   required
-                  id='fullName'
-                  name='fullName'
+                  id='name'
+                  name='name'
                   type='text'
-                  autoComplete='fullName'
+                  autoComplete='name'
                   placeholder='Emil John'
                   autoFocus
                   icon='/src/assets/person.svg' // Use person SVG icon path
