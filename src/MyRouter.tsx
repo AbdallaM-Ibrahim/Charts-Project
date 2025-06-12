@@ -35,7 +35,7 @@ export const MyRouter: React.FC<React.PropsWithChildren> = () => {
 
   return (
     <Router>
-      {!token && <Navbar />}
+      {/* {!token && <Navbar />} */}
       <Routes>
         {/* Public routes */}
         <Route path='/signin' element={<Signin />} />
