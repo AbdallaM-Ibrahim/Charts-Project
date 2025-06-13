@@ -12,7 +12,7 @@ const Profile: React.FC = () => {
         <div className='space-y-2'>
           <p>
             <span className='font-medium'>Name:</span>{' '}
-            {user.fullName || 'Not set'}
+            {user.name || 'Not set'}
           </p>
           <p>
             <span className='font-medium'>Email:</span>{' '}

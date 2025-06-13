@@ -5,7 +5,7 @@ import { createAppSlice } from '../create-slice';
 export interface UserState {
   id: number | null;
   email: string | null;
-  fullName: string | null;
+  name: string | null;
   phone?: string | null;
   token: string | null;
 }
@@ -13,7 +13,7 @@ export interface UserState {
 const initialState: UserState = {
   id: null,
   email: null,
-  fullName: null,
+  name: null,
   phone: null,
   token: null,
 };
@@ -26,7 +26,7 @@ export const userSlice = createAppSlice({
       (state, action: PayloadAction<Partial<UserState>>) => {
         state.id = action.payload.id ?? state.id;
         state.email = action.payload.email ?? state.email;
-        state.fullName = action.payload.fullName ?? state.fullName;
+        state.name = action.payload.name ?? state.name;
         state.phone = action.payload.phone ?? state.phone;
         state.token = action.payload.token ?? state.token;
       }
@@ -34,7 +34,7 @@ export const userSlice = createAppSlice({
     removeUser: create.reducer((state) => {
       state.id = initialState.id;
       state.email = initialState.email;
-      state.fullName = initialState.fullName;
+      state.name = initialState.name;
       state.phone = initialState.phone;
       state.token = initialState.token;
     }),

@@ -9,7 +9,7 @@ export type UserCredentials = {
 
 export type User = Omit<UserCredentials, 'password'> & {
   id: number;
-  fullName?: string;
+  name?: string;
   phone?: string;
   createdAt?: Date;
   updatedAt?: Date;
@@ -20,7 +20,7 @@ export type UserData = User & {
 };
 
 export type UserRegister = {
-  fullName: string;
+  name: string;
   email: string;
   phone: string;
   password: string;
@@ -43,7 +43,7 @@ const AuthService = {
     return {
       id: 1,
       email: 'user@example.com',
-      fullName: 'User',
+      name: 'User',
       phone: '+201234567890',
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -66,7 +66,7 @@ const AuthService = {
         currentUserData = {
           id: 1, // Placeholder ID
           email: userCredentials.email,
-          fullName: userCredentials.email.split('@')[0], // Use email prefix as fullName
+          name: userCredentials.email.split('@')[0], // Use email prefix as name
         };
 
         // Return placeholder token to maintain current flow
@@ -109,15 +109,15 @@ const AuthService = {
       console.log('Registering user:', newUser);
       // Transform the user data to match API expectations per OpenAPI spec
       const registrationData: UserRegister = {
-        fullName: newUser.fullName,
+        name: newUser.name,
         email: newUser.email,
         phone: newUser.phone,
         password: newUser.password,
-      };
+      } as any;
 
       // Validate required fields before sending
       if (
-        !registrationData.fullName ||
+        !registrationData.name ||
         !registrationData.email ||
         !registrationData.phone ||
         !registrationData.password
@@ -125,15 +125,15 @@ const AuthService = {
         throw new Error('All fields are required');
       }
 
-      const response = await axios.post(`${apiUrl}/register`, registrationData);
+      const response = await axios.post(`${apiUrl}/register/request`, registrationData);
 
       // API returns { message: 'User registered successfully' } on success
-      if (response.data.message === 'User registered successfully') {
+      if (response.status < 300) {
         // Store user data for the session since API doesn't return user info
         currentUserData = {
           id: 1, // Placeholder ID
           email: registrationData.email,
-          fullName: registrationData.fullName,
+          name: registrationData.name,
           phone: registrationData.phone,
         };
 

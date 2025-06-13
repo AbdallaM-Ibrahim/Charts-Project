@@ -24,21 +24,6 @@ const App: React.FC = () => {
   return (
     <div className='flex flex-col min-h-screen bg-[#EFF2F4] text-gray-900'>
       <MyRouter />
-      <footer className='text-center my-auto text-sm max-h-[70px]'>
-        <p>
-          Made with{' '}
-          <span role='img' aria-label='React'>
-            ⚛️
-          </span>{' '}
-          by{' '}
-          <a
-            href='mailto:futuresolve.tech@gmail.com?subject=Contact from Charts Project'
-            className='hover:underline text-inherit'
-          >
-            FutureSolve
-          </a>
-        </p>
-      </footer>
     </div>
   );
 };

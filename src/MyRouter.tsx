@@ -43,7 +43,7 @@ export const MyRouter: React.FC<React.PropsWithChildren> = () => {
 
         {/* Protected routes */}
         {
-          // token ?
+          token ?
           <>
             <Route
               path='/'
@@ -87,9 +87,9 @@ export const MyRouter: React.FC<React.PropsWithChildren> = () => {
             />
             <Route path='/*' element={<Navigate replace to='/' />} />
           </>
-          //  : (
-          //   <Route path='/*' element={<Navigate replace to='/signin' />} />
-          // )
+           : (
+            <Route path='/*' element={<Navigate replace to='/signin' />} />
+          )
         }
       </Routes>
     </Router>
