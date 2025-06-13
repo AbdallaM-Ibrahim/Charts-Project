@@ -83,6 +83,7 @@ const Home: React.FC = () => {
               <PieChart
                 title='Product Sales Distribution'
                 data={salesDistributionData}
+                showLabels={true}
               />
 
               {/* Current Inventory Levels Chart */}

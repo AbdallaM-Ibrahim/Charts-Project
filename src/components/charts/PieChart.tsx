@@ -6,6 +6,7 @@ export interface PieChartData {
   labels: string[];
   data: number[];
   backgroundColor: string[];
+  showLabels?: boolean;
   hoverBackgroundColor: string[];
 }
 
