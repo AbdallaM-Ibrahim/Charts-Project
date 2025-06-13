@@ -25,7 +25,7 @@ const Register = () => {
       name: data.get('name') as string,
       email: data.get('email') as string,
       password: data.get('password') as string,
-      phone: data.get('phone') as string | undefined,
+      phone: data.get('phone') as string,
     };
 
     dispatch(register(user));

@@ -2,47 +2,44 @@ import axios, { AxiosError } from 'axios';
 import { apiUrl } from '../config/env';
 import type { ChartId } from './chart.service';
 
-export type ActivityType = 'upload_file' | 'add_chart_data';
-export type TargetType = 'file' | 'chart' | 'template';
-
-export interface HistoryEntry {
-  activityType: ActivityType;
-  description: string;
-  targetType: TargetType;
-  targetId: string;
-  timestamp: string;
-  userId?: string;
+export interface ChartData {
+  type: string;
+  title: string;
+  data: {
+    labels: string[];
+    datasets: Array<{
+      label: string;
+      data: number[];
+    }>;
+  };
 }
 
-export interface HistoryFilters {
-  targetType?: TargetType;
-  targetId?: string;
+export interface HistoryEntry {
+  id: string;
+  name: string;
+  data?: {
+    charts: Array<ChartData>;
+  };
+  createdAt: string;
 }
 
 const HistoryService = {
   /**
-   * Get activity history with optional filtering
-   * @param filters - Optional filters for target type and ID
+   * Get dashboard history (treated as main history)
    * @returns Promise with array of history entries
    */
-  getHistory: async (filters?: HistoryFilters): Promise<HistoryEntry[]> => {
+  getHistory: async (): Promise<HistoryEntry[]> => {
     try {
-      const params = new URLSearchParams();
+      const response = await axios.get<{
+        success: boolean;
+        data: HistoryEntry[];
+      }>(`${apiUrl}/dashboards`);
 
-      if (filters?.targetType) {
-        params.append('targetType', filters.targetType);
+      if (!response.data.success) {
+        throw new Error('Failed to fetch history');
       }
 
-      if (filters?.targetId) {
-        params.append('targetId', filters.targetId);
-      }
-
-      const url = `${apiUrl}/history${
-        params.toString() ? `?${params.toString()}` : ''
-      }`;
-      const response = await axios.get<HistoryEntry[]>(url);
-
-      return response.data;
+      return response.data.data;
     } catch (error) {
       if (error instanceof AxiosError && error.response?.status === 500) {
         throw new Error('Failed to fetch history');
@@ -53,74 +50,37 @@ const HistoryService = {
   },
 
   /**
-   * Get file upload history
-   * @returns Promise with array of file upload history entries
+   * Get dashboard-specific details (chart history)
+   * @param dashboardId - Dashboard ID to get details for
+   * @returns Promise with dashboard details
    */
-  getFileHistory: async (): Promise<HistoryEntry[]> => {
+  getChartHistory: async (dashboardId: ChartId): Promise<HistoryEntry> => {
     try {
-      const response = await axios.get<HistoryEntry[]>(
-        `${apiUrl}/history/files`
-      );
-      return response.data;
-    } catch (error) {
-      if (error instanceof AxiosError && error.response) {
-        const { status, data } = error.response;
+      const response = await axios.get<{
+        success: boolean;
+        data: HistoryEntry;
+      }>(`${apiUrl}/dashboards/${dashboardId}`);
 
-        if (status === 404) {
-          throw new Error(data.message || 'No file history found.');
-        }
-        if (status === 500) {
-          throw new Error('Failed to fetch file histories');
-        }
+      if (!response.data.success) {
+        throw new Error('Failed to fetch dashboard details');
       }
 
-      throw new Error('Failed to fetch file history');
-    }
-  },
-
-  /**
-   * Get chart-specific history
-   * @param chartId - Chart ID to get history for
-   * @returns Promise with array of chart history entries
-   */
-  getChartHistory: async (chartId: ChartId): Promise<HistoryEntry[]> => {
-    try {
-      const response = await axios.get<HistoryEntry[]>(
-        `${apiUrl}/history/chart/${chartId}`
-      );
-      return response.data;
+      return response.data.data;
     } catch (error) {
       if (error instanceof AxiosError && error.response) {
         const { status, data } = error.response;
         if (status === 404) {
-          throw new Error(data.message || 'No history found for this chart.');
+          throw new Error(
+            data.message || 'No history found for this dashboard.'
+          );
         }
 
         if (status === 500) {
-          throw new Error('Failed to fetch chart history');
+          throw new Error('Failed to fetch dashboard history');
         }
       }
 
-      throw new Error('Failed to fetch chart history');
-    }
-  },
-
-  /**
-   * Get history filtered by activity type
-   * @param activityType - Type of activity to filter by
-   * @returns Promise with filtered history entries
-   */
-  getHistoryByActivity: async (
-    activityType: ActivityType
-  ): Promise<HistoryEntry[]> => {
-    try {
-      // Using the general history endpoint with activity type filtering
-      // Note: The API doesn't explicitly support activityType filtering in the spec,
-      // but this could be implemented by filtering the results client-side
-      const allHistory = await HistoryService.getHistory();
-      return allHistory.filter((entry) => entry.activityType === activityType);
-    } catch (error) {
-      throw new Error('Failed to fetch activity history');
+      throw new Error('Failed to fetch dashboard history');
     }
   },
 
@@ -137,7 +97,7 @@ const HistoryService = {
       return history
         .sort(
           (a, b) =>
-            new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
         )
         .slice(0, limit);
     } catch (error) {

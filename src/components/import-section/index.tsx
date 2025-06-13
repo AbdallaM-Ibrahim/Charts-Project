@@ -2,6 +2,7 @@ import type React from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import FileService from '../../services/file.service';
+import { Link } from 'react-router-dom';
 
 const baseStyle = {
   display: 'flex',
@@ -54,8 +55,15 @@ const ImportSection: React.FC<ImportSectionProps> = ({ className = '' }) => {
     try {
       // Upload the first file (you can modify this to handle multiple files)
       const file = files[0];
-      await FileService.uploadFile(file);
-      setUploadStatus(`✓ ${file.name} uploaded successfully`);
+      const result = await FileService.uploadFile(file);
+
+      // Handle different response formats
+      const message =
+        typeof result === 'string' ? result : 'File uploaded successfully';
+      setUploadStatus(`✓ ${file.name} uploaded successfully: ${message}`);
+
+      // Clear files after successful upload
+      setFiles([]);
     } catch (error) {
       setUploadStatus(
         `✗ Upload failed: ${
@@ -282,12 +290,14 @@ const ImportSection: React.FC<ImportSectionProps> = ({ className = '' }) => {
           {uploading ? 'Uploading...' : 'Upload'}
         </button>
 
-        <button
-          type='button'
-          className='w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 px-6 rounded-lg transition-colors duration-200'
-        >
-          Data Source
-        </button>
+        <Link to='/data-source'>
+          <button
+            type='button'
+            className='w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 px-6 rounded-lg transition-colors duration-200'
+          >
+            Data Source
+          </button>
+        </Link>
       </div>
     </div>
   );
