@@ -12,7 +12,7 @@ const Home: React.FC = () => {
     {
       title: 'Sales',
       description: 'Analyze sales performance, trends and inventory',
-      icon: '📊',
+      icon: 'assets/sales.svg',
       bgColor: 'bg-blue-100',
       borderColor: 'hover:border-blue-400',
       hoverColor: 'hover:bg-blue-200',
@@ -20,7 +20,7 @@ const Home: React.FC = () => {
     {
       title: 'Finance',
       description: 'Analyze budget, profit and loss',
-      icon: '💰',
+      icon: 'assets/finance.svg',
       bgColor: 'bg-green-100',
       borderColor: 'hover:border-green-400',
       hoverColor: 'hover:bg-green-200',
@@ -28,14 +28,14 @@ const Home: React.FC = () => {
     {
       title: 'Marketing',
       description: 'Analyze campaigns, web traffic and engagement',
-      icon: '📢',
+      icon: 'assets/marketing.svg',
       bgColor: 'bg-red-100',
       borderColor: 'hover:border-red-400',
       hoverColor: 'hover:bg-red-200',
     },
   ];
   return (
-    <div className='px-6 py-4'>
+    <div className='px-6'>
       {/* Main Container with Responsive Layout */}
       <div className='grid grid-cols-1 xl:grid-cols-3 gap-6'>
         {/* Main Content Section */}
@@ -48,14 +48,16 @@ const Home: React.FC = () => {
             </div>
 
             {/* Domain Cards */}
-            <div className='grid grid-cols-1 md:grid-cols-3 gap-6 mb-12'>
+            <div className='grid grid-cols-1 md:grid-cols-3 gap-10 mb-12 max-w-4xl mx-auto'>
               {domainCards.map((card) => (
                 <div
                   key={card.title}
-                  className={`p-8 rounded-2xl border-2 cursor-pointer transition-all duration-200 hover:shadow-lg ${card.bgColor} bg-white border-gray-200 ${card.hoverColor} border-gray-300 ${card.borderColor}`}
+                  className={`flex justify-center items-center h-80 md:h-64 p-8 rounded-2xl border-2 cursor-pointer transition-all duration-200 hover:shadow-lg ${card.bgColor} bg-white border-gray-200 ${card.hoverColor} border-gray-300 ${card.borderColor}`}
                 >
                   <div className='text-center'>
-                    <div className='text-5xl mb-6'>{card.icon}</div>
+                    <div className='text-5xl mb-2 flex justify-center items-center'>
+                      <img src={card.icon} alt={card.title} />
+                    </div>
                     <h3 className='text-xl font-bold text-gray-900 mb-3'>
                       {card.title}
                     </h3>

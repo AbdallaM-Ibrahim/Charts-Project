@@ -26,7 +26,7 @@ export const MyRouter: React.FC<React.PropsWithChildren> = () => {
   }) => {
     return (
       // height should be screen minus footer height
-      <div className='flex min-h-[calc(100vh_-_70px)] bg-[#EFF2F4] pt-6'>
+      <div className='flex min-h-[calc(100vh_-_70px)] bg-[#EFF2F4] py-6'>
         <Drawer />
         <main className='flex-1 overflow-y-auto'>{children}</main>
       </div>

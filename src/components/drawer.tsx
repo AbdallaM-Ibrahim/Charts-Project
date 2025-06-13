@@ -7,7 +7,6 @@ import DatabaseIcon from './icons/DatabaseIcon';
 import UserIcon from './icons/UserIcon';
 import SettingsIcon from './icons/SettingsIcon';
 import DoorArrowIcon from './icons/DoorArrowIcon';
-import MenuIcon from './icons/MenuIcon';
 
 interface DrawerItemProps {
   to: string;
@@ -100,8 +99,14 @@ const Drawer: React.FC = () => {
       <div className='flex items-center px-4 py-3 mx-3 mt-8 mb-4'>
         {!isCollapsed && (
           <>
-            <MenuIcon className='w-5 h-5 text-[#2C60EA]' />
-            <h1 className='text-3xl font-bold text-[#2C60EA] tracking-tight flex-1 pl-2'>
+            <img
+              src='assets/Logo_updated.svg'
+              alt='Instalyze Logo'
+              className='w-8 h-8 mr-2'
+              width={42}
+              height={42}
+            />
+            <h1 className='text-3xl font-bold tracking-tight flex-1 pl-2'>
               Instalyze
             </h1>
           </>
