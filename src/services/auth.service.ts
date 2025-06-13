@@ -50,7 +50,7 @@ const AuthService = {
     };
   },
 
-  signin: async (userCredentials: UserCredentials): Promise<string> => {
+  signin: async (userCredentials: UserCredentials) => {
     try {
       // Only send email and password as per API specification
       const loginData = {
@@ -61,16 +61,22 @@ const AuthService = {
       const response = await axios.post(`${apiUrl}/login`, loginData);
 
       // API returns { message: 'Login successful' } on success
-      if (response.data.message === 'Login successful') {
+      if (response.status < 300) {
+        const token = response.data.token || 'session-authenticated'; // Placeholder token
+
         // Store user data for the session since API doesn't return user info
         currentUserData = {
-          id: 1, // Placeholder ID
-          email: userCredentials.email,
-          name: userCredentials.email.split('@')[0], // Use email prefix as name
+          id: response.data.id || 1, // Placeholder ID
+          email: loginData.email || userCredentials.email,
+          name: response.data.name || 'User', // Placeholder name
+          phone: response.data.phone || '+201234567890', // Placeholder phone
         };
 
         // Return placeholder token to maintain current flow
-        return 'session-authenticated';
+        return {
+          token: token,
+          user: currentUserData,
+        };
       }
 
       throw new Error('Login failed');
@@ -113,7 +119,7 @@ const AuthService = {
         email: newUser.email,
         phone: newUser.phone,
         password: newUser.password,
-      } as any;
+      };
 
       // Validate required fields before sending
       if (

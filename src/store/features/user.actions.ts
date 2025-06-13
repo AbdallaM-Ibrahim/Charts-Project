@@ -14,8 +14,7 @@ export const getSelf =
 export const signIn =
   (email: string, password: string): AppThunk =>
   async (dispatch: Dispatch<PayloadAction<string | Partial<UserState>>>) => {
-    const token = await AuthService.signin({ email, password });
-    const user = await AuthService.getProfile(token);
+    const { token, user } = await AuthService.signin({ email, password });
     dispatch(setToken(token));
     localStorage.setItem('token', token);
     dispatch(setUser(user));
