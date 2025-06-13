@@ -118,7 +118,7 @@ const Drawer: React.FC = () => {
           type='button'
         >
           <DoorArrowIcon
-            className='w-5 h-5 text-[#2C60EA]'
+            className='w-5 h-5 text-[#2C60EA] lg:hidden'
             isCollapsed={isCollapsed}
           />
         </button>
