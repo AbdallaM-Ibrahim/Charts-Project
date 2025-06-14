@@ -15,11 +15,7 @@ const BackButton: React.FC<BackButtonProps> = ({
   const navigate = useNavigate();
 
   return (
-    <button
-      type='button'
-      onClick={() => navigate(to)}
-      className={className}
-    >
+    <button type='button' onClick={() => navigate(to)} className={className}>
       <svg
         className='w-5 h-5'
         fill='none'

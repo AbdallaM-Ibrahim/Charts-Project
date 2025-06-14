@@ -23,7 +23,7 @@ const Profile: React.FC = () => {
           {user.phone && (
             <p>
               <span className='font-medium'>Phone:</span>{' '}
-              {user.phone || "+20-123-456-7890"}
+              {user.phone || '+20-123-456-7890'}
             </p>
           )}
         </div>
