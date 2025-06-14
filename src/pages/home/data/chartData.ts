@@ -1,5 +1,5 @@
-import type { PieChartData } from '../../components/charts/PieChart';
-import type { AreaChartData } from '../../components/charts/AreaChart';
+import type { PieChartData } from '../../../components/charts/PieChart';
+import type { AreaChartData } from '../../../components/charts/AreaChart';
 
 // Chart data configurations
 export const salesDistributionData: PieChartData = {
@@ -26,5 +26,5 @@ export const inventoryLevelsData: AreaChartData = {
   borderColor: '#3B82F6',
   pointBackgroundColor: '#3B82F6',
   xAxisLabel: 'Products',
-  yAxisLabel: 'Units'
+  yAxisLabel: 'Units',
 };

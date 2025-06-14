@@ -7,7 +7,7 @@ import {
   salesDistributionData,
   salesDistributionData2,
   inventoryLevelsData,
-} from './chartData';
+} from './data/chartData';
 
 const Home: React.FC = () => {
   const [selectedDomainId, setSelectedDomainId] = useState<number>(0);
