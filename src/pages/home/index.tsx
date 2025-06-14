@@ -1,7 +1,8 @@
 import type React from 'react';
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { PieChart, AreaChart } from '../../components/charts';
 import ImportSection from '../../components/import-section';
+import DomainCards, { type DomainCard } from './components/DomainCards';
 import {
   salesDistributionData,
   salesDistributionData2,
@@ -9,17 +10,15 @@ import {
 } from './chartData';
 
 const Home: React.FC = () => {
-  const [currentCardIndex, setCurrentCardIndex] = useState(1);
-  const [touchStart, setTouchStart] = useState<number | null>(null);
-  const [touchEnd, setTouchEnd] = useState<number | null>(null);
-  const carouselRef = useRef<HTMLDivElement>(null);
+  const [selectedDomainId, setSelectedDomainId] = useState<number>(0);
 
-  const domainCards = [
+  const domainCards: DomainCard[] = [
     {
       id: 0,
       title: 'Sales',
       description: 'Analyze sales performance, trends and inventory',
       icon: 'assets/sales.svg',
+      iconClass: 'rotate-y-180',
       bgColor: 'bg-blue-100',
       borderColor: 'hover:border-blue-400',
       hoverColor: 'hover:bg-blue-200',
@@ -44,41 +43,8 @@ const Home: React.FC = () => {
     },
   ];
 
-  const nextCard = () => {
-    setCurrentCardIndex((prev) => (prev + 1) % domainCards.length);
-  };
-
-  const prevCard = () => {
-    setCurrentCardIndex(
-      (prev) => (prev - 1 + domainCards.length) % domainCards.length
-    );
-  };
-
-  const goToCard = (index: number) => {
-    setCurrentCardIndex(index);
-  };
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchEnd(null);
-    setTouchStart(e.targetTouches[0].clientX);
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    setTouchEnd(e.targetTouches[0].clientX);
-  };
-
-  const handleTouchEnd = () => {
-    if (!touchStart || !touchEnd) return;
-
-    const distance = touchStart - touchEnd;
-    const isLeftSwipe = distance > 50;
-    const isRightSwipe = distance < -50;
-
-    if (isLeftSwipe) {
-      nextCard();
-    } else if (isRightSwipe) {
-      prevCard();
-    }
+  const handleDomainSelect = (cardId: number) => {
+    setSelectedDomainId(cardId === selectedDomainId ? 0 : cardId);
   };
 
   return (
@@ -94,85 +60,12 @@ const Home: React.FC = () => {
               <p className='text-gray-500'>Choose the domain to analyze</p>
             </div>
 
-            {/* Domain Cards - Grid for lg+ screens */}
-            <div className='hidden lg:grid grid-cols-1 md:grid-cols-3 gap-10 mb-12 md:max-w-4xl max-w-md mx-auto'>
-              {domainCards.map((card) => (
-                <div
-                  key={card.title}
-                  className={`flex justify-center items-center h-20 md:h-64 p-8 rounded-2xl border-2 cursor-pointer transition-all duration-200 hover:shadow-lg ${card.bgColor} bg-white border-gray-200 ${card.hoverColor} border-gray-300 ${card.borderColor}`}
-                >
-                  <div className='text-center'>
-                    <div className='text-5xl mb-2 flex justify-center items-center'>
-                      <img src={card.icon} alt={card.title} />
-                    </div>
-                    <h3 className='text-xl font-bold text-gray-900 mb-3'>
-                      {card.title}
-                    </h3>
-                    <p className='text-gray-600 text-sm leading-relaxed'>
-                      {card.description}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Domain Cards - Carousel for md and smaller screens */}
-            <div className='lg:hidden mb-12'>
-              <div className='relative max-w-md mx-auto'>
-                {/* Carousel Container */}
-                <div
-                  className='overflow-hidden rounded-2xl'
-                  onTouchStart={handleTouchStart}
-                  onTouchMove={handleTouchMove}
-                  onTouchEnd={handleTouchEnd}
-                  ref={carouselRef}
-                >
-                  <div
-                    className='flex transition-transform duration-300 ease-in-out'
-                    style={{
-                      transform: `translateX(-${currentCardIndex * 100}%)`,
-                    }}
-                  >
-                    {domainCards.map((card) => (
-                      <div key={card.id} className='w-full flex-shrink-0'>
-                        <div
-                          className={`flex justify-center items-center h-64 p-8 rounded-2xl border-2 cursor-pointer transition-all duration-200 hover:shadow-lg ${card.bgColor} bg-white border-gray-200 ${card.hoverColor} border-gray-300 ${card.borderColor}`}
-                        >
-                          <div className='text-center'>
-                            <div className='text-5xl mb-2 flex justify-center items-center'>
-                              <img src={card.icon} alt={card.title} />
-                            </div>
-                            <h3 className='text-xl font-bold text-gray-900 mb-3'>
-                              {card.title}
-                            </h3>
-                            <p className='text-gray-600 text-sm leading-relaxed'>
-                              {card.description}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Dots Indicator */}
-                <div className='flex justify-center mt-4 space-x-2'>
-                  {domainCards.map((card) => (
-                    <button
-                      key={card.id}
-                      type='button'
-                      onClick={() => goToCard(card.id)}
-                      className={`w-2 h-2 rounded-full transition-colors duration-200 ${
-                        card.id === currentCardIndex
-                          ? 'bg-blue-600'
-                          : 'bg-gray-300'
-                      }`}
-                      title='Go to card'
-                    />
-                  ))}
-                </div>
-              </div>
-            </div>
+            {/* Domain Cards Component */}
+            <DomainCards
+              cards={domainCards}
+              selectedCardId={selectedDomainId}
+              onCardSelect={handleDomainSelect}
+            />
 
             {/* Overview Section */}
             <div className='hidden lg:block mb-8'>
