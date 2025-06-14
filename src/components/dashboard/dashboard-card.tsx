@@ -1,4 +1,5 @@
 import type React from 'react';
+import ChartIcon from '../icons/ChartIcon';
 
 interface DashboardCardProps {
   dashboard: {
@@ -25,40 +26,60 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
 
   return (
     <div
-      className='bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow cursor-pointer border border-gray-200'
+      className='bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer'
       onClick={() => onClick(dashboard.id)}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           onClick(dashboard.id);
         }
       }}
+      tabIndex={0}
+      role='button'
+      aria-label={`View details for ${dashboard.name}`}
     >
-      <div className='flex justify-between items-start mb-3'>
-        <h3 className='text-xl font-semibold text-gray-800 truncate'>
-          {dashboard.name}
-        </h3>
-        <div className='flex items-center text-sm text-gray-500 ml-4'>
-          <svg className='w-4 h-4 mr-1' fill='currentColor' viewBox='0 0 20 20'>
-            <title>Check Circle</title>
-            <path d='M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' />
-          </svg>
+      <div className='flex items-center justify-between'>
+        <div className='flex items-center space-x-4'>
+          <div className='relative'>
+            <ChartIcon className='w-12 h-12 text-blue-600' />
+          </div>
+          <div>
+            <h3 className='font-semibold text-gray-900 text-lg'>
+              {dashboard.name}
+            </h3>
+            <p className='text-sm text-gray-500'>
+              Created: {formatDate(dashboard.createdAt)}
+            </p>
+          </div>
         </div>
-      </div>
 
-      <div className='text-sm text-gray-600 mb-4'>
-        Created: {formatDate(dashboard.createdAt)}
-      </div>
-
-      <div className='flex justify-between items-center'>
-        <span className='inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800'>
-          Dashboard
-        </span>
-        <button
-          type='button'
-          className='text-blue-600 hover:text-blue-800 text-sm font-medium'
-        >
-          View Details →
-        </button>
+        <div className='flex items-center'>
+          <span className='inline-flex items-center px-3 py-1 rounded-full m-x-3 text-xs font-medium bg-blue-100 text-blue-800 mr-4'>
+            Dashboard
+          </span>
+          <button
+            type='button'
+            className='text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center'
+            onClick={(e) => {
+              e.stopPropagation();
+              onClick(dashboard.id);
+            }}
+          >
+            View Details
+            <svg
+              className='w-4 h-4 ml-1'
+              fill='none'
+              stroke='currentColor'
+              viewBox='0 0 24 24'
+            >
+              <path
+                strokeLinecap='round'
+                strokeLinejoin='round'
+                strokeWidth={2}
+                d='M9 5l7 7-7 7'
+              />
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -40,7 +40,6 @@ const ChartRenderer: React.FC<ChartRendererProps> = ({
   chartData,
   className,
   height = 'h-72', // Increased default height for better visibility
-  onChartInteraction,
 }) => {
   // Map API chart type to our internal type
   const mappedType = CHART_TYPE_MAPPING[chartData.type.toLowerCase()];
@@ -92,46 +91,6 @@ const ChartRenderer: React.FC<ChartRendererProps> = ({
 
   const config = convertToChartConfig();
 
-  const handlePieClick = (
-    label: string,
-    value: number,
-    datasetIndex: number
-  ) => {
-    onChartInteraction?.('pie', label, value, datasetIndex);
-  };
-
-  const handleAreaClick = (
-    label: string,
-    value: number,
-    datasetIndex: number
-  ) => {
-    onChartInteraction?.('area', label, value, datasetIndex);
-  };
-
-  const handleScatterClick = (
-    label: string,
-    x: number,
-    y: number,
-    datasetIndex: number
-  ) => {
-    onChartInteraction?.('scatter', label, { x, y }, datasetIndex);
-  };
-
-  const handleBarClick = (
-    label: string,
-    value: number,
-    datasetIndex: number
-  ) => {
-    onChartInteraction?.('bar', label, value, datasetIndex);
-  };
-
-  const handleHeatmapClick = (
-    x: string | number,
-    y: string | number,
-    value: number
-  ) => {
-    onChartInteraction?.('heatmap', `(${x}, ${y})`, value);
-  };
 
   switch (mappedType) {
     case 'pie':
@@ -141,7 +100,6 @@ const ChartRenderer: React.FC<ChartRendererProps> = ({
           config={config as Partial<ChartConfiguration<'pie'>>}
           className={className}
           height={height}
-          onSegmentClick={handlePieClick}
         />
       );
 
@@ -151,9 +109,7 @@ const ChartRenderer: React.FC<ChartRendererProps> = ({
           title={chartData.title}
           config={config as Partial<ChartConfiguration<'line'>>}
           className={className}
-          height={height}
-          onPointClick={handleAreaClick}
-        />
+          height={height}        />
       );
 
     case 'scatter':
@@ -163,7 +119,6 @@ const ChartRenderer: React.FC<ChartRendererProps> = ({
           config={config as Partial<ChartConfiguration<'scatter'>>}
           className={className}
           height={height}
-          onPointClick={handleScatterClick}
         />
       );
 
@@ -174,7 +129,6 @@ const ChartRenderer: React.FC<ChartRendererProps> = ({
           config={config as Partial<ChartConfiguration<'bar'>>}
           className={className}
           height={height}
-          onBarClick={handleBarClick}
         />
       );
 
@@ -185,7 +139,6 @@ const ChartRenderer: React.FC<ChartRendererProps> = ({
           config={config as Partial<ChartConfiguration<'matrix'>>}
           className={className}
           height={height}
-          onCellClick={handleHeatmapClick}
         />
       );
 

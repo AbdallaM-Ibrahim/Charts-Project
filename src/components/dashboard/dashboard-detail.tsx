@@ -21,29 +21,12 @@ const DashboardDetail: React.FC<DashboardDetailProps> = ({ dashboard }) => {
     });
   };
 
-  const handleChartInteraction = (
-    type: string,
-    label: string,
-    value: number | { x: number; y: number }
-  ) => {
-    let displayValue: string;
-
-    if (typeof value === 'object') {
-      displayValue = `(${value.x}, ${value.y})`;
-    } else {
-      displayValue = value.toString();
-    }
-
-    setSelectedChart(`${type}: ${label} - ${displayValue}`);
-  };
-
   const renderChart = (chart: ChartData, index: number) => {
     return (
       <div key={`${dashboard.id}-chart-${chart.title}-${index}`}>
         <ChartRenderer
           chartData={chart}
           height='h-80'
-          onChartInteraction={handleChartInteraction}
         />
       </div>
     );

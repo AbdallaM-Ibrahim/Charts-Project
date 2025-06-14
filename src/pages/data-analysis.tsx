@@ -153,7 +153,7 @@ const DataAnalysis: React.FC = () => {
           <h2 className='text-xl font-semibold text-gray-900'>
             Available Dashboards
           </h2>
-          <div className='grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+          <div className='space-y-4'>
             {dashboards.map((dashboard) => (
               <DashboardCard
                 key={dashboard.id}
