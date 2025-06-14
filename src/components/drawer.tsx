@@ -113,12 +113,12 @@ const Drawer: React.FC = () => {
         )}
         <button
           onClick={toggleDrawer}
-          className='p-2 rounded-lg hover:bg-gray-100 transition-colors'
+          className={`p-2 rounded-lg hover:bg-gray-100 transition-colors ${!isCollapsed ? 'lg:hidden' : ''}`}
           aria-label='Toggle drawer'
           type='button'
         >
           <DoorArrowIcon
-            className='w-5 h-5 text-[#2C60EA] lg:hidden'
+            className='w-5 h-5 text-[#2C60EA]'
             isCollapsed={isCollapsed}
           />
         </button>
