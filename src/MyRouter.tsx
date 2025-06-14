@@ -11,7 +11,6 @@ import Register from './pages/register';
 import Home from './pages/home';
 import DataAnalysis from './pages/data-analysis';
 import DataSource from './pages/data-source';
-import Demo from './pages/demo/demo';
 import Profile from './pages/profile';
 import Settings from './pages/settings';
 import { useAppSelector } from './hooks/store.hooks';
@@ -66,14 +65,6 @@ export const MyRouter: React.FC<React.PropsWithChildren> = () => {
               element={
                 <AuthenticatedLayout>
                   <DataSource />
-                </AuthenticatedLayout>
-              }
-            />
-            <Route
-              path='/demo'
-              element={
-                <AuthenticatedLayout>
-                  <Demo />
                 </AuthenticatedLayout>
               }
             />

@@ -7,7 +7,6 @@ import DatabaseIcon from './icons/DatabaseIcon';
 import UserIcon from './icons/UserIcon';
 import SettingsIcon from './icons/SettingsIcon';
 import DoorArrowIcon from './icons/DoorArrowIcon';
-import ChartIcon from './icons/ChartIcon';
 
 interface DrawerItemProps {
   to: string;
@@ -77,11 +76,6 @@ const Drawer: React.FC = () => {
       to: '/data-source',
       icon: <DatabaseIcon className='w-5 h-5' />,
       label: 'Data Source',
-    },
-    {
-      to: '/demo',
-      icon: <ChartIcon className='w-5 h-5' />,
-      label: 'Demo',
     },
     {
       to: '/profile',

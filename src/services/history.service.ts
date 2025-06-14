@@ -8,6 +8,9 @@ export interface ChartData {
   data: {
     labels: string[];
     datasets: Array<{
+      backgroundColor: string | string[];
+      borderColor: string;
+      hoverBackgroundColor: string | string[];
       label: string;
       data: number[];
     }>;
