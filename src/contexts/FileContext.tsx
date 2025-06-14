@@ -1,40 +1,32 @@
 import type React from 'react';
-import {
-  createContext,
-  useState,
-  type ReactNode,
-} from 'react';
+import { createContext, useState, type ReactNode } from 'react';
 import type { SelectedFile, FileContextType } from '../types/fileContext';
 
-export const FileContext = createContext<FileContextType | undefined>(undefined);
+export const FileContext = createContext<FileContextType | undefined>(
+  undefined
+);
 
 export const FileProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [selectedFiles, setSelectedFiles] = useState<SelectedFile[]>([]);
+  const [selectedFile, setSelectedFileState] = useState<SelectedFile | null>(
+    null
+  );
 
-  const addSelectedFile = (file: SelectedFile) => {
-    setSelectedFiles((prev) => {
-      if (prev.find((f) => f.id === file.id)) return prev;
-      return [file];
-    });
+  const setSelectedFile = (file: SelectedFile | null) => {
+    setSelectedFileState(file);
   };
 
-  const removeSelectedFile = (fileId: string) => {
-    setSelectedFiles((prev) => prev.filter((f) => f.id !== fileId));
-  };
-
-  const clearSelectedFiles = () => {
-    setSelectedFiles([]);
+  const isFileSelected = (fileId: string) => {
+    return selectedFile?.id === fileId;
   };
 
   return (
     <FileContext.Provider
       value={{
-        selectedFiles,
-        addSelectedFile,
-        removeSelectedFile,
-        clearSelectedFiles,
+        selectedFile,
+        setSelectedFile,
+        isFileSelected,
       }}
     >
       {children}

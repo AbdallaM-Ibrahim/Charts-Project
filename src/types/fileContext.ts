@@ -7,8 +7,7 @@ export interface SelectedFile {
 }
 
 export interface FileContextType {
-  selectedFiles: SelectedFile[];
-  addSelectedFile: (file: SelectedFile) => void;
-  removeSelectedFile: (fileId: string) => void;
-  clearSelectedFiles: () => void;
+  selectedFile: SelectedFile | null;
+  setSelectedFile: (file: SelectedFile | null) => void;
+  isFileSelected: (fileId: string) => boolean;
 }

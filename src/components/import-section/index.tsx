@@ -48,9 +48,9 @@ const ImportSection: React.FC<ImportSectionProps> = ({ className = '' }) => {
   const [files, setFiles] = useState<File[]>([]);
   const [uploading, setUploading] = useState(false);
   const [uploadStatus, setUploadStatus] = useState<string>('');
-  const { selectedFiles, clearSelectedFiles } = useFileContext();
+  const { selectedFile, setSelectedFile } = useFileContext();
 
-  // Convert selected files from context to display format
+  // Convert selected file and uploaded files to display format
   const displayFiles: {
     name: string;
     size: number;
@@ -59,24 +59,32 @@ const ImportSection: React.FC<ImportSectionProps> = ({ className = '' }) => {
     file?: File;
     id?: string;
   }[] = useMemo(() => {
-    const contextFiles = selectedFiles.map((file) => ({
-      name: file.name,
-      size: file.size,
-      type: file.type,
-      isFromContext: true,
-      id: file.id,
-    }));
+    const displayItems = [];
 
-    const uploadedFiles = files.map((file) => ({
-      name: file.name,
-      size: file.size,
-      type: file.type,
-      isFromContext: false,
-      file,
-    }));
+    // Add selected file from context if exists
+    if (selectedFile) {
+      displayItems.push({
+        name: selectedFile.name,
+        size: selectedFile.size,
+        type: selectedFile.type,
+        isFromContext: true,
+        id: selectedFile.id,
+      });
+    }
 
-    return [...contextFiles, ...uploadedFiles];
-  }, [selectedFiles, files]);
+    // Add uploaded files if no file from context
+    if (!selectedFile && files.length > 0) {
+      displayItems.push({
+        name: files[0].name,
+        size: files[0].size,
+        type: files[0].type,
+        isFromContext: false,
+        file: files[0],
+      });
+    }
+
+    return displayItems;
+  }, [selectedFile, files]);
 
   const handleUpload = async () => {
     if (files.length === 0) return;
@@ -107,12 +115,27 @@ const ImportSection: React.FC<ImportSectionProps> = ({ className = '' }) => {
     }
   };
 
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    if (acceptedFiles.length > 0) {
-      setFiles(acceptedFiles);
-      setUploadStatus('');
+  const removeFile = () => {
+    if (selectedFile) {
+      setSelectedFile(null);
+    } else {
+      setFiles([]);
     }
-  }, []);
+  };
+
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      if (acceptedFiles.length > 0) {
+        // Clear any selected file from context when dropping new file
+        if (selectedFile) {
+          setSelectedFile(null);
+        }
+        setFiles([acceptedFiles[0]]); // Only take the first file
+        setUploadStatus('');
+      }
+    },
+    [selectedFile, setSelectedFile]
+  );
 
   const {
     getRootProps,
@@ -156,25 +179,6 @@ const ImportSection: React.FC<ImportSectionProps> = ({ className = '' }) => {
       }
     };
   }, [files]);
-
-  const clearAllFiles = () => {
-    setFiles([]);
-    clearSelectedFiles();
-    setUploadStatus('');
-  };
-
-  const removeFile = (index: number, isFromContext: boolean) => {
-    if (isFromContext) {
-      const file = selectedFiles[index];
-      if (file) {
-        clearSelectedFiles();
-      }
-    } else {
-      const contextFilesCount = selectedFiles.length;
-      const fileIndex = index - contextFilesCount;
-      setFiles((prev) => prev.filter((_, i) => i !== fileIndex));
-    }
-  };
 
   return (
     <div className={`bg-white rounded-xl shadow-sm p-6 ${className}`}>
@@ -265,17 +269,19 @@ const ImportSection: React.FC<ImportSectionProps> = ({ className = '' }) => {
       {displayFiles.length > 0 && (
         <div className='mb-6'>
           <h3 className='text-sm font-medium text-gray-700 mb-3'>
-            Selected Files:
+            Selected File:
           </h3>
           <div className='space-y-2'>
             {displayFiles.map((file, index) => (
               <div
                 key={
-                  file.isFromContext
-                    ? `context-${file.name}`
-                    : `upload-${index}`
+                  file.isFromContext ? `context-${file.id}` : `upload-${index}`
                 }
-                className='flex items-center justify-between p-3 bg-gray-50 rounded-lg border'
+                className={`flex items-center justify-between p-3 rounded-lg border ${
+                  file.isFromContext
+                    ? 'bg-blue-50 border-blue-200'
+                    : 'bg-gray-50 border-gray-200'
+                }`}
               >
                 <div className='flex items-center'>
                   <FileIcon type={file.type} className='w-10 h-10 mr-3' />
@@ -294,7 +300,7 @@ const ImportSection: React.FC<ImportSectionProps> = ({ className = '' }) => {
                   </div>
                 </div>
                 <button
-                  onClick={() => removeFile(index, file.isFromContext)}
+                  onClick={removeFile}
                   className='text-red-500 hover:text-red-700 transition-colors'
                   aria-label='Remove file'
                   type='button'

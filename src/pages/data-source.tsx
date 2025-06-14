@@ -12,7 +12,7 @@ const DataSource: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>('');
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
-  const { addSelectedFile } = useFileContext();
+  const { setSelectedFile, isFileSelected } = useFileContext();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -49,16 +49,21 @@ const DataSource: React.FC = () => {
   };
 
   const handleImport = (file: FileInfo) => {
-    console.log('Importing file:', file);
-    addSelectedFile({
-      id: file.id,
-      name: file.name,
-      filename: file.filename,
-      size: file.size,
-      type: file.type,
-    });
-    navigate('/');
+    if (isFileSelected(file.id)) {
+      // If already selected, deselect
+      setSelectedFile(null);
+    } else {
+      // Select new file
+      setSelectedFile({
+        id: file.id,
+        name: file.name,
+        filename: file.filename,
+        size: file.size,
+        type: file.type,
+      });
+    }
     setOpenMenuId(null);
+    navigate('/');
   };
 
   const toggleMenu = (fileId: string) => {
@@ -79,7 +84,6 @@ const DataSource: React.FC = () => {
   return (
     <div className='p-6'>
       <BackButton text='Back' />
-
       <div className='mb-6'>
         <h1 className='text-3xl font-bold text-gray-900 mb-2'>Recent</h1>
       </div>
@@ -94,11 +98,13 @@ const DataSource: React.FC = () => {
         {files.map((file) => (
           <div
             key={file.id}
-            className='bg-white p-4 rounded-lg shadow-sm border hover:shadow-md transition-shadow relative'
+            className={`bg-white p-4 rounded-lg shadow-sm border transition-all relative *:hover:shadow-md`}
           >
             <div className='flex items-center justify-between'>
               <div className='flex items-center space-x-4'>
-                <FileIcon type={file.type} className='w-12 h-12' />
+                <div className='relative'>
+                  <FileIcon type={file.type} className='w-12 h-12' />
+                </div>
                 <div>
                   <h3 className='font-medium text-gray-900'>{file.name}</h3>
                   <p className='text-sm text-gray-500'>
@@ -136,7 +142,7 @@ const DataSource: React.FC = () => {
                         onClick={() => handleImport(file)}
                         className='block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
                       >
-                        Import to Home
+                        Reuse to analyze
                       </button>
                       <button
                         disabled
