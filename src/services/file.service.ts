@@ -16,6 +16,10 @@ export interface FileInfo {
   uploadedBy: string;
 }
 
+const getToken: () => string | null = () => {
+  return localStorage.getItem('token');
+};
+
 const FileService = {
   /**
    * Upload a file to the server
@@ -34,6 +38,7 @@ const FileService = {
       const response = await axios.post(`${apiUrl}/upload`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${getToken()}`,
         },
       });
 
@@ -70,7 +75,12 @@ const FileService = {
   getAllFiles: async (): Promise<FileInfo[]> => {
     try {
       const response = await axios.get<{ success: boolean; data: FileInfo[] }>(
-        `${apiUrl}/files`
+        `${apiUrl}/files`,
+        {
+          headers: {
+            Authorization: `Bearer ${getToken()}`,
+          },
+        }
       );
 
       if (!response.data.success) {
@@ -102,7 +112,12 @@ const FileService = {
   getFileInfo: async (fileId: string): Promise<FileInfo> => {
     try {
       const response = await axios.get<{ success: boolean; data: FileInfo }>(
-        `${apiUrl}/files/${encodeURIComponent(fileId)}`
+        `${apiUrl}/files/${encodeURIComponent(fileId)}`,
+        {
+          headers: {
+            Authorization: `Bearer ${getToken()}`,
+          },
+        }
       );
 
       if (!response.data.success) {
@@ -139,6 +154,9 @@ const FileService = {
         `${apiUrl}/files/${encodeURIComponent(filename)}`,
         {
           responseType: 'blob',
+          headers: {
+            Authorization: `Bearer ${getToken()}`,
+          },
         }
       );
 

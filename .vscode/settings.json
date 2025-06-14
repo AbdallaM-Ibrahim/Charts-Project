@@ -1,4 +1,5 @@
 {
   "tailwindCSS.experimental.configFile": "./src/index.css",
-  "cSpell.words": ["Instalyze"]
+  "cSpell.words": ["Instalyze"],
+  "svg.preview.background": "transparent"
 }

@@ -3,6 +3,9 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import FileService from '../../services/file.service';
 import { Link } from 'react-router-dom';
+import { useFileContext } from '../../hooks/useFileContext';
+import { formatFileSize } from '../../utils/fileUtils';
+import { FileIcon } from '../../utils/fileIcons';
 
 const baseStyle = {
   display: 'flex',
@@ -45,6 +48,35 @@ const ImportSection: React.FC<ImportSectionProps> = ({ className = '' }) => {
   const [files, setFiles] = useState<File[]>([]);
   const [uploading, setUploading] = useState(false);
   const [uploadStatus, setUploadStatus] = useState<string>('');
+  const { selectedFiles, clearSelectedFiles } = useFileContext();
+
+  // Convert selected files from context to display format
+  const displayFiles: {
+    name: string;
+    size: number;
+    type: string;
+    isFromContext: boolean;
+    file?: File;
+    id?: string;
+  }[] = useMemo(() => {
+    const contextFiles = selectedFiles.map((file) => ({
+      name: file.name,
+      size: file.size,
+      type: file.type,
+      isFromContext: true,
+      id: file.id,
+    }));
+
+    const uploadedFiles = files.map((file) => ({
+      name: file.name,
+      size: file.size,
+      type: file.type,
+      isFromContext: false,
+      file,
+    }));
+
+    return [...contextFiles, ...uploadedFiles];
+  }, [selectedFiles, files]);
 
   const handleUpload = async () => {
     if (files.length === 0) return;
@@ -125,9 +157,23 @@ const ImportSection: React.FC<ImportSectionProps> = ({ className = '' }) => {
     };
   }, [files]);
 
-  const clearFiles = () => {
+  const clearAllFiles = () => {
     setFiles([]);
+    clearSelectedFiles();
     setUploadStatus('');
+  };
+
+  const removeFile = (index: number, isFromContext: boolean) => {
+    if (isFromContext) {
+      const file = selectedFiles[index];
+      if (file) {
+        clearSelectedFiles();
+      }
+    } else {
+      const contextFilesCount = selectedFiles.length;
+      const fileIndex = index - contextFilesCount;
+      setFiles((prev) => prev.filter((_, i) => i !== fileIndex));
+    }
   };
 
   return (
@@ -216,44 +262,39 @@ const ImportSection: React.FC<ImportSectionProps> = ({ className = '' }) => {
       )}
 
       {/* File Preview */}
-      {files.length > 0 && (
+      {displayFiles.length > 0 && (
         <div className='mb-6'>
           <h3 className='text-sm font-medium text-gray-700 mb-3'>
             Selected Files:
           </h3>
           <div className='space-y-2'>
-            {files.map((file, index) => (
+            {displayFiles.map((file, index) => (
               <div
-                // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-                key={index}
+                key={
+                  file.isFromContext
+                    ? `context-${file.name}`
+                    : `upload-${index}`
+                }
                 className='flex items-center justify-between p-3 bg-gray-50 rounded-lg border'
               >
                 <div className='flex items-center'>
-                  <svg
-                    className='w-5 h-5 text-gray-400 mr-3'
-                    fill='none'
-                    stroke='currentColor'
-                    viewBox='0 0 24 24'
-                  >
-                    <title>File Icon</title>
-                    <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      strokeWidth={2}
-                      d='M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'
-                    />
-                  </svg>
+                  <FileIcon type={file.type} className='w-10 h-10 mr-3' />
                   <div>
                     <p className='text-sm font-medium text-gray-900'>
                       {file.name}
+                      {file.isFromContext && (
+                        <span className='ml-2 text-xs text-blue-600 bg-blue-100 px-2 py-1 rounded'>
+                          From Data Source
+                        </span>
+                      )}
                     </p>
                     <p className='text-xs text-gray-500'>
-                      {(file.size / 1024 / 1024).toFixed(2)} MB
+                      {formatFileSize(file.size)}
                     </p>
                   </div>
                 </div>
                 <button
-                  onClick={clearFiles}
+                  onClick={() => removeFile(index, file.isFromContext)}
                   className='text-red-500 hover:text-red-700 transition-colors'
                   aria-label='Remove file'
                   type='button'
@@ -285,7 +326,7 @@ const ImportSection: React.FC<ImportSectionProps> = ({ className = '' }) => {
           type='button'
           onClick={handleUpload}
           className='w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200'
-          disabled={uploading || files.length === 0}
+          disabled={uploading || displayFiles.length === 0}
         >
           {uploading ? 'Uploading...' : 'Upload'}
         </button>
