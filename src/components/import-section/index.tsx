@@ -188,141 +188,144 @@ const ImportSection: React.FC<ImportSectionProps> = ({ className = '' }) => {
         <p className='text-gray-500'>Upload your data files to get started</p>
       </div>
 
-      {/* Upload Area */}
+      {/* Upload Area or Selected File Display */}
       <div className='mb-6'>
-        <div {...getRootProps({ style })} className='cursor-pointer'>
-          <input {...getInputProps()} />
-          <div className='text-center'>
-            {/* Upload Icon */}
-            <div className='mx-auto mb-4'>
-              <svg
-                className='w-16 h-16 text-gray-400'
-                fill='none'
-                stroke='currentColor'
-                viewBox='0 0 24 24'
-                xmlns='http://www.w3.org/2000/svg'
-              >
-                <title>Upload Icon</title>
-                <path
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                  strokeWidth={1}
-                  d='M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12'
-                />
-              </svg>
-            </div>
+        {displayFiles.length > 0 ? (
+          // Selected File Display - clean, centered layout
+          <div className='border-2 border-dashed border-blue-200 rounded-xl bg-blue-50/30 p-8'>
+            <div className='flex flex-col items-center text-center'>
+              {/* File Icon */}
+              <div className='mb-4'>
+                <FileIcon type={displayFiles[0].type} className='w-12 h-12' />
+              </div>
 
-            {/* Upload Text */}
-            <div className='space-y-2'>
-              {isDragActive ? (
-                <p className='text-lg font-medium'>
-                  {isDragAccept
-                    ? 'Drop your file here!'
-                    : 'File type not supported'}
+              {/* File Info */}
+              <div className='mb-6 space-y-1'>
+                <h3 className='text-lg font-semibold text-gray-900 break-all'>
+                  {displayFiles[0].name}
+                </h3>
+                <p className='text-sm text-gray-600'>
+                  {formatFileSize(displayFiles[0].size)}
                 </p>
-              ) : (
-                <>
-                  <p className='text-lg font-medium text-gray-700'>
-                    Drag and drop your files here
-                  </p>
-                  <p className='text-sm text-gray-500'>
-                    or click to browse files
-                  </p>
-                </>
-              )}
-            </div>
+                {displayFiles[0].isFromContext && (
+                  <div className='pt-2'>
+                    <span className='inline-block text-xs font-medium text-blue-700 bg-blue-100 px-2 py-1 rounded-full'>
+                      From Data Source
+                    </span>
+                  </div>
+                )}
+              </div>
 
-            {/* Supported Formats */}
-            <div className='mt-4'>
-              <p className='text-xs text-gray-400'>
-                Supported formats: CSV, XLS, XLSX, JSON
-              </p>
-              <p className='text-xs text-gray-400 mt-1'>Max file size: 10MB</p>
+              {/* Unselect Button */}
+              <button
+                onClick={removeFile}
+                className='inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
+                type='button'
+              >
+                <svg
+                  className='w-4 h-4 mr-2'
+                  fill='none'
+                  stroke='currentColor'
+                  viewBox='0 0 24 24'
+                >
+                  <title>Remove file</title>
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth={2}
+                    d='M6 18L18 6M6 6l12 12'
+                  />
+                </svg>
+                Remove File
+              </button>
             </div>
           </div>
-        </div>
+        ) : (
+          // Original Drag and Drop Area - improved spacing
+          <div
+            {...getRootProps({ style })}
+            className='cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-xl'
+          >
+            <input {...getInputProps()} />
+            <div className='text-center py-8'>
+              {/* Upload Icon */}
+              <div className='mb-4'>
+                <svg
+                  className='w-12 h-12 text-gray-400 mx-auto'
+                  fill='none'
+                  stroke='currentColor'
+                  viewBox='0 0 24 24'
+                  xmlns='http://www.w3.org/2000/svg'
+                >
+                  <title>Upload Icon</title>
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth={1.5}
+                    d='M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12'
+                  />
+                </svg>
+              </div>
+
+              {/* Upload Text */}
+              <div className='mb-4 space-y-1'>
+                {isDragActive ? (
+                  <p className='text-base font-medium text-gray-900'>
+                    {isDragAccept
+                      ? 'Drop your file here!'
+                      : 'File type not supported'}
+                  </p>
+                ) : (
+                  <>
+                    <p className='text-base font-medium text-gray-900'>
+                      Drag and drop your file here
+                    </p>
+                    <p className='text-sm text-gray-500'>
+                      or click to browse files
+                    </p>
+                  </>
+                )}
+              </div>
+
+              {/* Supported Formats */}
+              <div className='space-y-1'>
+                <p className='text-xs text-gray-500'>
+                  Supported formats: CSV, XLS, XLSX, JSON
+                </p>
+                <p className='text-xs text-gray-500'>Max file size: 10MB</p>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Upload Status */}
       {uploading && (
-        <div className='mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg'>
+        <div className='mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg'>
           <div className='flex items-center'>
-            <div className='animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2' />
-            <span className='text-blue-700'>Uploading...</span>
+            <div className='animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-3' />
+            <span className='text-sm font-medium text-blue-700'>
+              Uploading...
+            </span>
           </div>
         </div>
       )}
 
       {uploadStatus && !uploading && (
         <div
-          className={`mb-4 p-4 rounded-lg ${
+          className={`mb-4 p-3 rounded-lg ${
             uploadStatus.startsWith('✓')
-              ? 'bg-green-50 border border-green-200 text-green-700'
-              : 'bg-red-50 border border-red-200 text-red-700'
+              ? 'bg-green-50 border border-green-200'
+              : 'bg-red-50 border border-red-200'
           }`}
         >
-          {uploadStatus}
-        </div>
-      )}
-
-      {/* File Preview */}
-      {displayFiles.length > 0 && (
-        <div className='mb-6'>
-          <h3 className='text-sm font-medium text-gray-700 mb-3'>
-            Selected File:
-          </h3>
-          <div className='space-y-2'>
-            {displayFiles.map((file, index) => (
-              <div
-                key={
-                  file.isFromContext ? `context-${file.id}` : `upload-${index}`
-                }
-                className={`flex items-center justify-between p-3 rounded-lg border ${
-                  file.isFromContext
-                    ? 'bg-blue-50 border-blue-200'
-                    : 'bg-gray-50 border-gray-200'
-                }`}
-              >
-                <div className='flex items-center'>
-                  <FileIcon type={file.type} className='w-10 h-10 mr-3' />
-                  <div>
-                    <p className='text-sm font-medium text-gray-900'>
-                      {file.name}
-                      {file.isFromContext && (
-                        <span className='ml-2 text-xs text-blue-600 bg-blue-100 px-2 py-1 rounded'>
-                          From Data Source
-                        </span>
-                      )}
-                    </p>
-                    <p className='text-xs text-gray-500'>
-                      {formatFileSize(file.size)}
-                    </p>
-                  </div>
-                </div>
-                <button
-                  onClick={removeFile}
-                  className='text-red-500 hover:text-red-700 transition-colors'
-                  aria-label='Remove file'
-                  type='button'
-                >
-                  <svg
-                    className='w-4 h-4'
-                    fill='none'
-                    stroke='currentColor'
-                    viewBox='0 0 24 24'
-                  >
-                    <title>Remove file</title>
-                    <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      strokeWidth={2}
-                      d='M6 18L18 6M6 6l12 12'
-                    />
-                  </svg>
-                </button>
-              </div>
-            ))}
-          </div>
+          <p
+            className={`text-sm font-medium ${
+              uploadStatus.startsWith('✓') ? 'text-green-700' : 'text-red-700'
+            }`}
+          >
+            {uploadStatus}
+          </p>
         </div>
       )}
 
@@ -331,16 +334,16 @@ const ImportSection: React.FC<ImportSectionProps> = ({ className = '' }) => {
         <button
           type='button'
           onClick={handleUpload}
-          className='w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200'
+          className='w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 disabled:cursor-not-allowed text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
           disabled={uploading || displayFiles.length === 0}
         >
-          {uploading ? 'Uploading...' : 'Upload'}
+          {uploading ? 'Uploading...' : 'Upload File'}
         </button>
 
-        <Link to='/data-source'>
+        <Link to='/data-source' className='block'>
           <button
             type='button'
-            className='w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 px-6 rounded-lg transition-colors duration-200'
+            className='w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-3 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2'
           >
             Data Source
           </button>

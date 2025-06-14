@@ -25,18 +25,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
   };
 
   return (
-    <div
-      className='bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer'
-      onClick={() => onClick(dashboard.id)}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          onClick(dashboard.id);
-        }
-      }}
-      tabIndex={0}
-      role='button'
-      aria-label={`View details for ${dashboard.name}`}
-    >
+    <div className='bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow'>
       <div className='flex items-center justify-between'>
         <div className='flex items-center space-x-4'>
           <div className='relative'>
@@ -59,10 +48,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
           <button
             type='button'
             className='text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center'
-            onClick={(e) => {
-              e.stopPropagation();
-              onClick(dashboard.id);
-            }}
+            onClick={() => onClick(dashboard.id)}
           >
             View Details
             <svg
