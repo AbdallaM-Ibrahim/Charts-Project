@@ -11,6 +11,7 @@ import Register from './pages/register';
 import Home from './pages/home';
 import DataAnalysis from './pages/data-analysis';
 import DataSource from './pages/data-source';
+import Demo from './pages/demo/demo';
 import Profile from './pages/profile';
 import Settings from './pages/settings';
 import { useAppSelector } from './hooks/store.hooks';
@@ -42,8 +43,7 @@ export const MyRouter: React.FC<React.PropsWithChildren> = () => {
         <Route path='/register' element={<Register />} />
 
         {/* Protected routes */}
-        {
-          token ?
+        {token ? (
           <>
             <Route
               path='/'
@@ -70,6 +70,14 @@ export const MyRouter: React.FC<React.PropsWithChildren> = () => {
               }
             />
             <Route
+              path='/demo'
+              element={
+                <AuthenticatedLayout>
+                  <Demo />
+                </AuthenticatedLayout>
+              }
+            />
+            <Route
               path='/profile'
               element={
                 <AuthenticatedLayout>
@@ -87,10 +95,9 @@ export const MyRouter: React.FC<React.PropsWithChildren> = () => {
             />
             <Route path='/*' element={<Navigate replace to='/' />} />
           </>
-           : (
-            <Route path='/*' element={<Navigate replace to='/signin' />} />
-          )
-        }
+        ) : (
+          <Route path='/*' element={<Navigate replace to='/signin' />} />
+        )}
       </Routes>
     </Router>
   );

@@ -30,6 +30,10 @@ export type UserRegister = {
 let currentUserData: User | null = null;
 
 const AuthService = {
+  getToken: (): string | null => {
+    return localStorage.getItem('token');
+  },
+
   getProfile: async (_token: string): Promise<User> => {
     // Since the API doesn't provide user profile endpoint and uses session-based auth,
     // we return stored user data or placeholder data to maintain the current flow

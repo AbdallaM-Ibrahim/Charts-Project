@@ -2,80 +2,77 @@ import type React from 'react';
 import { useChart } from '../../hooks/useChart';
 import type { ChartConfiguration } from 'chart.js/auto';
 
-export interface PieChartData {
-  labels: string[];
-  data: number[];
-  backgroundColor: string[];
-  showLabels?: boolean;
-  hoverBackgroundColor: string[];
-}
-
 interface PieChartProps {
-  title: string;
-  data: PieChartData;
+  title?: string;
+  config: Partial<ChartConfiguration<'pie'>>;
   className?: string;
-  showLabels?: boolean;
-  onSegmentClick?: (label: string, value: number) => void;
+  height?: string;
+  onSegmentClick?: (label: string, value: number, datasetIndex: number) => void;
 }
 
 const PieChart: React.FC<PieChartProps> = ({
   title,
-  data,
+  config,
   className = '',
-  showLabels = false,
+  height = 'h-48',
   onSegmentClick,
 }) => {
-  const chartConfig: ChartConfiguration<'pie'> = {
+  // Default configuration with UX best practices
+  const defaultConfig: ChartConfiguration<'pie'> = {
     type: 'pie',
     data: {
-      labels: data.labels,
-      datasets: [
-        {
-          data: data.data,
-          backgroundColor: data.backgroundColor,
-          borderWidth: 2,
-          borderColor: '#ffffff',
-          hoverOffset: 8,
-          hoverBorderWidth: 3,
-          hoverBackgroundColor: data.hoverBackgroundColor,
-        },
-      ],
+      labels: [],
+      datasets: [],
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
         legend: {
-          display: showLabels,
+          display: true,
           position: 'bottom',
           labels: {
-            color: '#4a5568', // Tailwind gray-700
+            color: '#4B5563',
             font: {
-              size: 14,
+              size: 12,
               weight: 500,
             },
             usePointStyle: true,
             pointStyle: 'circle',
+            padding: 15,
+            boxWidth: 8,
           },
         },
         tooltip: {
           enabled: true,
-          backgroundColor: 'rgba(0, 0, 0, 0.8)',
-          titleColor: '#ffffff',
-          bodyColor: '#ffffff',
-          borderColor: '#ffffff',
+          backgroundColor: 'rgba(17, 24, 39, 0.95)',
+          titleColor: '#F9FAFB',
+          bodyColor: '#F9FAFB',
+          borderColor: 'rgba(59, 130, 246, 0.5)',
           borderWidth: 1,
           cornerRadius: 8,
+          padding: 12,
           displayColors: true,
           callbacks: {
             label: (context) => {
               const label = context.label || '';
               const value = context.parsed;
-              const total = context.dataset.data.reduce((a, b) => a + b, 0);
-              const percentage = ((value / total) * 100).toFixed(1);
-              return `${label}: ${value}% (${percentage}% of total)`;
+              const total = context.dataset.data.reduce(
+                (a, b) => Number(a) + Number(b),
+                0
+              );
+              const percentage = ((value / Number(total)) * 100).toFixed(1);
+              return `${label}: ${value} (${percentage}%)`;
             },
           },
+        },
+      },
+      elements: {
+        arc: {
+          borderWidth: 2,
+          borderColor: '#FFFFFF',
+          hoverBorderWidth: 3,
+          hoverBorderColor: '#FFFFFF',
         },
       },
       onHover: (_, activeElements, chart) => {
@@ -89,12 +86,15 @@ const PieChart: React.FC<PieChartProps> = ({
         if (activeElements.length > 0 && onSegmentClick) {
           const element = activeElements[0];
           const dataIndex = element.index;
+          const datasetIndex = element.datasetIndex;
           const labels = chart.data.labels;
-          const dataset = chart.data.datasets[0];
+          const dataset = chart.data.datasets[datasetIndex];
+
           if (dataset && labels && labels[dataIndex]) {
             onSegmentClick(
               labels[dataIndex] as string,
-              dataset.data[dataIndex] as number
+              dataset.data[dataIndex] as number,
+              datasetIndex
             );
           }
         }
@@ -102,13 +102,44 @@ const PieChart: React.FC<PieChartProps> = ({
     },
   };
 
-  const { canvasRef } = useChart(chartConfig);
+  // Deep merge configurations with user config taking precedence
+  const mergedConfig: ChartConfiguration<'pie'> = {
+    ...defaultConfig,
+    ...config,
+    data: {
+      ...defaultConfig.data,
+      ...config.data,
+    },
+    options: {
+      ...defaultConfig.options,
+      ...config.options,
+      plugins: {
+        ...defaultConfig.options?.plugins,
+        ...config.options?.plugins,
+        legend: {
+          ...defaultConfig.options?.plugins?.legend,
+          ...config.options?.plugins?.legend,
+        },
+        tooltip: {
+          ...defaultConfig.options?.plugins?.tooltip,
+          ...config.options?.plugins?.tooltip,
+        },
+      },
+    },
+  };
+
+  const { canvasRef } = useChart(mergedConfig);
 
   return (
-    <div className={`bg-gray-50 rounded-xl p-6 ${className}`}>
-      <h3 className='text-lg  text-gray-600 mb-1 text-center'>{title}</h3>
-      {/* <h4 className='text-md text-gray-600 mb-6'>{subtitle}</h4> */}
-      <div className='relative h-48'>
+    <div
+      className={`bg-white rounded-xl shadow-sm border border-gray-200 p-6 ${className}`}
+    >
+      {title && (
+        <h3 className='text-lg font-semibold text-gray-800 mb-4 text-center'>
+          {title}
+        </h3>
+      )}
+      <div className={`relative ${height}`}>
         <canvas ref={canvasRef} />
       </div>
     </div>

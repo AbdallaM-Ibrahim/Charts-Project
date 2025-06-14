@@ -723,6 +723,11 @@ chart.js@^4.4.9:
   dependencies:
     "@kurkle/color" "^0.3.0"
 
+chartjs-chart-matrix@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/chartjs-chart-matrix/-/chartjs-chart-matrix-3.0.0.tgz#8f67d2c3db2325b37f3fbae726805e9146e060cc"
+  integrity sha512-lUWC1UaWkxGdG02dBJ5r1ppbSYB/uWmwAh11VEs7V3ZQItNCk4am+rmacwkgeb+SQeEj2hP9Qq4oGsUmPl/1lQ==
+
 color-convert@^2.0.1:
   version "2.0.1"
   resolved "https://registry.npmjs.org/color-convert/-/color-convert-2.0.1.tgz"

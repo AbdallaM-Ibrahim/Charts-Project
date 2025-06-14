@@ -2,24 +2,23 @@ import type React from 'react';
 import { useChart } from '../../hooks/useChart';
 import type { ChartConfiguration } from 'chart.js/auto';
 
-interface AreaChartProps {
+interface HistogramChartProps {
   title?: string;
-  config: Partial<ChartConfiguration<'line'>>;
+  config: Partial<ChartConfiguration<'bar'>>;
   className?: string;
   height?: string;
-  onPointClick?: (label: string, value: number, datasetIndex: number) => void;
+  onBarClick?: (label: string, value: number, datasetIndex: number) => void;
 }
 
-const AreaChart: React.FC<AreaChartProps> = ({
+const HistogramChart: React.FC<HistogramChartProps> = ({
   title,
   config,
   className = '',
   height = 'h-64',
-  onPointClick,
+  onBarClick,
 }) => {
-  // Default configuration optimized for area charts
-  const defaultConfig: ChartConfiguration<'line'> = {
-    type: 'line',
+  const defaultConfig: ChartConfiguration<'bar'> = {
+    type: 'bar',
     data: {
       labels: [],
       datasets: [],
@@ -27,10 +26,6 @@ const AreaChart: React.FC<AreaChartProps> = ({
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      interaction: {
-        mode: 'index',
-        intersect: false,
-      },
       scales: {
         x: {
           grid: {
@@ -65,15 +60,9 @@ const AreaChart: React.FC<AreaChartProps> = ({
         },
       },
       elements: {
-        line: {
-          tension: 0.4,
-          borderWidth: 2,
-        },
-        point: {
-          radius: 0,
-          hoverRadius: 6,
-          hoverBorderWidth: 2,
-          hoverBorderColor: '#FFFFFF',
+        bar: {
+          borderRadius: 4,
+          borderSkipped: false,
         },
       },
       plugins: {
@@ -89,7 +78,6 @@ const AreaChart: React.FC<AreaChartProps> = ({
           borderWidth: 1,
           cornerRadius: 8,
           padding: 12,
-          displayColors: true,
           callbacks: {
             label: (context) => {
               return `${context.dataset.label}: ${context.parsed.y}`;
@@ -105,7 +93,7 @@ const AreaChart: React.FC<AreaChartProps> = ({
         }
       },
       onClick: (_, activeElements, chart) => {
-        if (activeElements.length > 0 && onPointClick) {
+        if (activeElements.length > 0 && onBarClick) {
           const element = activeElements[0];
           const dataIndex = element.index;
           const datasetIndex = element.datasetIndex;
@@ -113,7 +101,7 @@ const AreaChart: React.FC<AreaChartProps> = ({
           const dataset = chart.data.datasets[datasetIndex];
 
           if (dataset && labels && labels[dataIndex]) {
-            onPointClick(
+            onBarClick(
               labels[dataIndex] as string,
               dataset.data[dataIndex] as number,
               datasetIndex
@@ -124,8 +112,8 @@ const AreaChart: React.FC<AreaChartProps> = ({
     },
   };
 
-  // Deep merge configurations
-  const mergedConfig: ChartConfiguration<'line'> = {
+  // Deep merge with default styling
+  const mergedConfig: ChartConfiguration<'bar'> = {
     ...defaultConfig,
     ...config,
     data: {
@@ -133,11 +121,12 @@ const AreaChart: React.FC<AreaChartProps> = ({
       ...config.data,
       datasets:
         config.data?.datasets?.map((dataset) => ({
-          fill: true,
-          backgroundColor: 'rgba(59, 130, 246, 0.1)',
+          backgroundColor: 'rgba(59, 130, 246, 0.8)',
           borderColor: '#3B82F6',
-          pointBackgroundColor: '#3B82F6',
-          pointHoverBackgroundColor: '#2563EB',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(37, 99, 235, 0.9)',
+          hoverBorderColor: '#2563EB',
+          hoverBorderWidth: 2,
           ...dataset,
         })) || defaultConfig.data.datasets,
     },
@@ -171,4 +160,4 @@ const AreaChart: React.FC<AreaChartProps> = ({
   );
 };
 
-export default AreaChart;
+export default HistogramChart;

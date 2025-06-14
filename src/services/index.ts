@@ -13,26 +13,5 @@ export type {
   UserData,
   UserRegister,
 } from './auth.service';
-export type { HealthStatus } from './health.service';
 export type { FileUploadResponse } from './file.service';
-export type {
-  Chart,
-  ChartData,
-  ChartDataset,
-  ChartWithData,
-  AddChartDataRequest,
-  AddChartDataResponse,
-  ChartType,
-  ChartId,
-} from './chart.service';
-export type {
-  Template,
-  TemplateWithCharts,
-  TemplateId,
-} from './template.service';
-export type {
-  HistoryEntry,
-  HistoryFilters,
-  ActivityType,
-  TargetType,
-} from './history.service';
+export type { HistoryEntry } from './history.service';

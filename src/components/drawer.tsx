@@ -7,6 +7,7 @@ import DatabaseIcon from './icons/DatabaseIcon';
 import UserIcon from './icons/UserIcon';
 import SettingsIcon from './icons/SettingsIcon';
 import DoorArrowIcon from './icons/DoorArrowIcon';
+import ChartIcon from './icons/ChartIcon';
 
 interface DrawerItemProps {
   to: string;
@@ -78,6 +79,11 @@ const Drawer: React.FC = () => {
       label: 'Data Source',
     },
     {
+      to: '/demo',
+      icon: <ChartIcon className='w-5 h-5' />,
+      label: 'Demo',
+    },
+    {
       to: '/profile',
       icon: <UserIcon className='w-5 h-5' />,
       label: 'Profile',
@@ -113,7 +119,9 @@ const Drawer: React.FC = () => {
         )}
         <button
           onClick={toggleDrawer}
-          className={`p-2 rounded-lg hover:bg-gray-100 transition-colors ${!isCollapsed ? 'lg:hidden' : ''}`}
+          className={`p-2 rounded-lg hover:bg-gray-100 transition-colors ${
+            !isCollapsed ? 'lg:hidden' : ''
+          }`}
           aria-label='Toggle drawer'
           type='button'
         >

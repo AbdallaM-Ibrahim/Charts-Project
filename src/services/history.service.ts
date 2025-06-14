@@ -1,6 +1,6 @@
 import axios, { AxiosError } from 'axios';
 import { apiUrl } from '../config/env';
-import type { ChartId } from './chart.service';
+import AuthService from './auth.service';
 
 export interface ChartData {
   type: string;
@@ -33,7 +33,11 @@ const HistoryService = {
       const response = await axios.get<{
         success: boolean;
         data: HistoryEntry[];
-      }>(`${apiUrl}/dashboards`);
+      }>(`${apiUrl}/dashboards`, {
+        headers: {
+          Authorization: `Bearer ${AuthService.getToken()}`,
+        },
+      });
 
       if (!response.data.success) {
         throw new Error('Failed to fetch history');
@@ -54,12 +58,16 @@ const HistoryService = {
    * @param dashboardId - Dashboard ID to get details for
    * @returns Promise with dashboard details
    */
-  getChartHistory: async (dashboardId: ChartId): Promise<HistoryEntry> => {
+  getChartHistory: async (dashboardId: string): Promise<HistoryEntry> => {
     try {
       const response = await axios.get<{
         success: boolean;
         data: HistoryEntry;
-      }>(`${apiUrl}/dashboards/${dashboardId}`);
+      }>(`${apiUrl}/dashboards/${dashboardId}`, {
+        headers: {
+          Authorization: `Bearer ${AuthService.getToken()}`,
+        },
+      });
 
       if (!response.data.success) {
         throw new Error('Failed to fetch dashboard details');

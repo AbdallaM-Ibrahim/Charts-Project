@@ -3,8 +3,7 @@ import { useEffect } from 'react';
 // import './App.css';
 import { MyRouter } from './MyRouter';
 import { useAppDispatch, useAppSelector } from './hooks/store.hooks';
-import { getSelf } from './store/features/user.actions';
-import { setToken } from './store/features/user.slice';
+import { setToken, setUser } from './store/features/user.slice';
 import { selectToken, selectUser } from './store/features/user.slice';
 
 const App: React.FC = () => {
@@ -17,7 +16,12 @@ const App: React.FC = () => {
       dispatch(setToken(localStorage.getItem('token') || ''));
     }
     if (token && !user.id) {
-      dispatch(getSelf(token));
+      // dispatch(getSelf(token));
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+      if (user?.id) {
+        dispatch(setUser(user));
+      }
     }
   }, [token, user.id, dispatch]);
 

@@ -4,9 +4,9 @@ import { PieChart, AreaChart } from '../../components/charts';
 import ImportSection from '../../components/import-section';
 import DomainCards, { type DomainCard } from './components/DomainCards';
 import {
-  salesDistributionData,
-  salesDistributionData2,
-  inventoryLevelsData,
+  salesDistributionConfig,
+  salesDistributionConfig2,
+  inventoryLevelsConfig,
 } from './data/chartData';
 
 const Home: React.FC = () => {
@@ -82,21 +82,19 @@ const Home: React.FC = () => {
               {/* Product Sales Distribution Chart 1 */}
               <PieChart
                 title='Product Sales Distribution'
-                data={salesDistributionData}
-                showLabels={true}
+                config={salesDistributionConfig}
               />
 
               {/* Current Inventory Levels Chart */}
               <AreaChart
                 title='Current Inventory Levels'
-                data={inventoryLevelsData}
-                maxValue={2000}
+                config={inventoryLevelsConfig}
               />
 
               {/* Product Sales Distribution Chart 2 */}
               <PieChart
                 title='Product Sales Distribution'
-                data={salesDistributionData2}
+                config={salesDistributionConfig2}
               />
             </div>
 

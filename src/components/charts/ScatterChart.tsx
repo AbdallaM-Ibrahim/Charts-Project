@@ -2,39 +2,41 @@ import type React from 'react';
 import { useChart } from '../../hooks/useChart';
 import type { ChartConfiguration } from 'chart.js/auto';
 
-interface AreaChartProps {
+interface ScatterChartProps {
   title?: string;
-  config: Partial<ChartConfiguration<'line'>>;
+  config: Partial<ChartConfiguration<'scatter'>>;
   className?: string;
   height?: string;
-  onPointClick?: (label: string, value: number, datasetIndex: number) => void;
+  onPointClick?: (
+    label: string,
+    x: number,
+    y: number,
+    datasetIndex: number
+  ) => void;
 }
 
-const AreaChart: React.FC<AreaChartProps> = ({
+const ScatterChart: React.FC<ScatterChartProps> = ({
   title,
   config,
   className = '',
   height = 'h-64',
   onPointClick,
 }) => {
-  // Default configuration optimized for area charts
-  const defaultConfig: ChartConfiguration<'line'> = {
-    type: 'line',
+  const defaultConfig: ChartConfiguration<'scatter'> = {
+    type: 'scatter',
     data: {
-      labels: [],
       datasets: [],
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      interaction: {
-        mode: 'index',
-        intersect: false,
-      },
       scales: {
         x: {
+          type: 'linear',
+          position: 'bottom',
           grid: {
-            display: false,
+            display: true,
+            color: 'rgba(107, 114, 128, 0.1)',
           },
           ticks: {
             color: '#6B7280',
@@ -47,7 +49,7 @@ const AreaChart: React.FC<AreaChartProps> = ({
           },
         },
         y: {
-          beginAtZero: true,
+          type: 'linear',
           grid: {
             display: true,
             color: 'rgba(107, 114, 128, 0.1)',
@@ -57,7 +59,6 @@ const AreaChart: React.FC<AreaChartProps> = ({
             font: {
               size: 11,
             },
-            padding: 8,
           },
           border: {
             display: false,
@@ -65,20 +66,27 @@ const AreaChart: React.FC<AreaChartProps> = ({
         },
       },
       elements: {
-        line: {
-          tension: 0.4,
-          borderWidth: 2,
-        },
         point: {
-          radius: 0,
-          hoverRadius: 6,
-          hoverBorderWidth: 2,
+          radius: 5,
+          hoverRadius: 8,
+          borderWidth: 2,
+          hoverBorderWidth: 3,
+          borderColor: '#FFFFFF',
           hoverBorderColor: '#FFFFFF',
         },
       },
       plugins: {
         legend: {
-          display: false,
+          display: true,
+          position: 'top',
+          labels: {
+            color: '#4B5563',
+            font: {
+              size: 12,
+            },
+            usePointStyle: true,
+            padding: 15,
+          },
         },
         tooltip: {
           enabled: true,
@@ -89,10 +97,10 @@ const AreaChart: React.FC<AreaChartProps> = ({
           borderWidth: 1,
           cornerRadius: 8,
           padding: 12,
-          displayColors: true,
           callbacks: {
             label: (context) => {
-              return `${context.dataset.label}: ${context.parsed.y}`;
+              const point = context.parsed as { x: number; y: number };
+              return `${context.dataset.label}: (${point.x}, ${point.y})`;
             },
           },
         },
@@ -107,39 +115,44 @@ const AreaChart: React.FC<AreaChartProps> = ({
       onClick: (_, activeElements, chart) => {
         if (activeElements.length > 0 && onPointClick) {
           const element = activeElements[0];
-          const dataIndex = element.index;
           const datasetIndex = element.datasetIndex;
-          const labels = chart.data.labels;
+          const dataIndex = element.index;
           const dataset = chart.data.datasets[datasetIndex];
+          const point = dataset.data[dataIndex] as { x: number; y: number };
 
-          if (dataset && labels && labels[dataIndex]) {
-            onPointClick(
-              labels[dataIndex] as string,
-              dataset.data[dataIndex] as number,
-              datasetIndex
-            );
+          if (dataset && point) {
+            onPointClick(dataset.label || '', point.x, point.y, datasetIndex);
           }
         }
       },
     },
   };
 
-  // Deep merge configurations
-  const mergedConfig: ChartConfiguration<'line'> = {
+  // Deep merge with default colors for datasets
+  const mergedConfig: ChartConfiguration<'scatter'> = {
     ...defaultConfig,
     ...config,
     data: {
       ...defaultConfig.data,
       ...config.data,
       datasets:
-        config.data?.datasets?.map((dataset) => ({
-          fill: true,
-          backgroundColor: 'rgba(59, 130, 246, 0.1)',
-          borderColor: '#3B82F6',
-          pointBackgroundColor: '#3B82F6',
-          pointHoverBackgroundColor: '#2563EB',
-          ...dataset,
-        })) || defaultConfig.data.datasets,
+        config.data?.datasets?.map((dataset, index) => {
+          const colors = [
+            '#3B82F6',
+            '#10B981',
+            '#F59E0B',
+            '#EF4444',
+            '#8B5CF6',
+          ];
+          const color = colors[index % colors.length];
+          return {
+            backgroundColor: color,
+            borderColor: color,
+            pointBackgroundColor: color,
+            pointHoverBackgroundColor: color,
+            ...dataset,
+          };
+        }) || defaultConfig.data.datasets,
     },
     options: {
       ...defaultConfig.options,
@@ -171,4 +184,4 @@ const AreaChart: React.FC<AreaChartProps> = ({
   );
 };
 
-export default AreaChart;
+export default ScatterChart;
