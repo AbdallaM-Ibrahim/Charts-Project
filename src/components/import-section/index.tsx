@@ -38,18 +38,24 @@ const rejectStyle = {
 
 interface ImportSectionProps {
   className?: string;
+  onFileUploaded?: (file: File) => void;
+  isAnalyzing?: boolean;
 }
 
 interface FileWithPreview extends File {
   preview?: string;
 }
 
-const ImportSection: React.FC<ImportSectionProps> = ({ className = '' }) => {
+const ImportSection: React.FC<ImportSectionProps> = ({ 
+  className = '', 
+  onFileUploaded,
+  isAnalyzing = false 
+}) => {
   const [files, setFiles] = useState<File[]>([]);
   const [uploading, setUploading] = useState(false);
   const [uploadStatus, setUploadStatus] = useState<string>('');
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const { selectedFile, setSelectedFile } = useFileContext();
-
   // Convert selected file and uploaded files to display format
   const displayFiles: {
     name: string;
@@ -61,8 +67,16 @@ const ImportSection: React.FC<ImportSectionProps> = ({ className = '' }) => {
   }[] = useMemo(() => {
     const displayItems = [];
 
-    // Add selected file from context if exists
-    if (selectedFile) {
+    // Priority: uploaded file > selected file from context > newly dropped files
+    if (uploadedFile) {
+      displayItems.push({
+        name: uploadedFile.name,
+        size: uploadedFile.size,
+        type: uploadedFile.type,
+        isFromContext: false,
+        file: uploadedFile,
+      });
+    } else if (selectedFile) {
       displayItems.push({
         name: selectedFile.name,
         size: selectedFile.size,
@@ -70,10 +84,7 @@ const ImportSection: React.FC<ImportSectionProps> = ({ className = '' }) => {
         isFromContext: true,
         id: selectedFile.id,
       });
-    }
-
-    // Add uploaded files if no file from context
-    if (!selectedFile && files.length > 0) {
+    } else if (files.length > 0) {
       displayItems.push({
         name: files[0].name,
         size: files[0].size,
@@ -84,25 +95,18 @@ const ImportSection: React.FC<ImportSectionProps> = ({ className = '' }) => {
     }
 
     return displayItems;
-  }, [selectedFile, files]);
-
-  const handleUpload = async () => {
-    if (files.length === 0) return;
-
+  }, [selectedFile, files, uploadedFile]);  const handleUpload = useCallback(async (file: File) => {
     setUploading(true);
-    setUploadStatus('');
+    setUploadStatus('');    try {
+      await FileService.uploadFile(file);
 
-    try {
-      // Upload the first file (you can modify this to handle multiple files)
-      const file = files[0];
-      const result = await FileService.uploadFile(file);
+      setUploadStatus(`✓ ${file.name} uploaded successfully`);
 
-      // Handle different response formats
-      const message =
-        typeof result === 'string' ? result : 'File uploaded successfully';
-      setUploadStatus(`✓ ${file.name} uploaded successfully: ${message}`);
+      // Set the uploaded file and notify parent
+      setUploadedFile(file);
+      onFileUploaded?.(file);
 
-      // Clear files after successful upload
+      // Clear dropped files after successful upload
       setFiles([]);
     } catch (error) {
       setUploadStatus(
@@ -113,28 +117,38 @@ const ImportSection: React.FC<ImportSectionProps> = ({ className = '' }) => {
     } finally {
       setUploading(false);
     }
-  };
+  }, [onFileUploaded]);
 
-  const removeFile = () => {
-    if (selectedFile) {
+  // Auto-upload when file is dropped/selected
+  useEffect(() => {
+    if (files.length > 0 && !uploading && !uploadedFile) {
+      handleUpload(files[0]);
+    }
+  }, [files, uploading, uploadedFile, handleUpload]);  const removeFile = () => {
+    if (uploadedFile) {
+      setUploadedFile(null);
+      setUploadStatus('');
+    } else if (selectedFile) {
       setSelectedFile(null);
     } else {
       setFiles([]);
     }
   };
-
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
       if (acceptedFiles.length > 0) {
-        // Clear any selected file from context when dropping new file
+        // Clear any previous state when dropping new file
         if (selectedFile) {
           setSelectedFile(null);
+        }
+        if (uploadedFile) {
+          setUploadedFile(null);
         }
         setFiles([acceptedFiles[0]]); // Only take the first file
         setUploadStatus('');
       }
     },
-    [selectedFile, setSelectedFile]
+    [selectedFile, setSelectedFile, uploadedFile]
   );
 
   const {
@@ -327,23 +341,31 @@ const ImportSection: React.FC<ImportSectionProps> = ({ className = '' }) => {
             {uploadStatus}
           </p>
         </div>
-      )}
-
-      {/* Action Buttons */}
+      )}      {/* Action Buttons */}
       <div className='space-y-3'>
-        <button
-          type='button'
-          onClick={handleUpload}
-          className='w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 disabled:cursor-not-allowed text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
-          disabled={uploading || displayFiles.length === 0}
-        >
-          {uploading ? 'Uploading...' : 'Upload File'}
-        </button>
+        {/* Status indicator for uploaded file */}
+        {uploadedFile && (
+          <div className='bg-green-50 border border-green-200 rounded-lg p-3'>
+            <div className='flex items-center'>              <svg className='w-4 h-4 text-green-600 mr-2' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                <title>Check</title>
+                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M5 13l4 4L19 7' />
+              </svg>
+              <span className='text-sm font-medium text-green-700'>
+                File ready for analysis
+              </span>
+            </div>
+          </div>
+        )}
 
         <Link to='/data-source' className='block'>
           <button
             type='button'
-            className='w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-3 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2'
+            className={`w-full font-medium py-3 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 ${
+              isAnalyzing 
+                ? 'bg-gray-200 text-gray-500 cursor-not-allowed' 
+                : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+            }`}
+            disabled={isAnalyzing}
           >
             Data Source
           </button>
